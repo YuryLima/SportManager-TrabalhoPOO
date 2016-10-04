@@ -10,5 +10,11 @@ package org.unipampa.sportmanager.esportes;
  * @author junio
  */
 public class Futebol extends Esporte{
-    private int quantTurma,tamanhoTurma;
+    
+    public Futebol(int turma, int horario, int quantTurma, int quantAluno, int maxTurma, int maxAluno) {
+        super(turma, horario, quantTurma, quantAluno, maxTurma, maxAluno);
+    }
+    
+   
+    
 }
