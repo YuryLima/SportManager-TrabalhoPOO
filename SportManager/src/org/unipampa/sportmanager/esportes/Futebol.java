@@ -7,10 +7,8 @@ package org.unipampa.sportmanager.esportes;
 
 /**
  *
- * @author yuryalencar
+ * @author junio
  */
-public abstract class Esporte {
-    protected int turma,horario,quantTurma;
-    
-    
+public class Futebol extends Esporte{
+    private int quantTurma,tamanhoTurma;
 }
