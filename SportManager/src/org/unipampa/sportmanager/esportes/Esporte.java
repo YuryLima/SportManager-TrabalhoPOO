@@ -9,98 +9,53 @@ package org.unipampa.sportmanager.esportes;
  *
  * @author yuryalencar
  */
-public abstract class Esporte {
-    protected int turma,horario,quantTurma,quantAluno;
-    protected final int MAX_TURMA,MAX_ALUNO;
-
-    /**
-     * 
-     * @param turma
-     * @param horario
-     * @param quantTurma
-     * @param quantAluno
-     * @param MAX_TURMA
-     * @param MAX_ALUNO 
-     */
-    public Esporte(int turma, int horario, int quantTurma, int quantAluno, int MAX_TURMA, int MAX_ALUNO) {
-        this.turma = turma;
-        this.horario = horario;
-        this.quantTurma = quantTurma;
-        this.quantAluno = quantAluno;
-        this.MAX_TURMA = MAX_TURMA;
-        this.MAX_ALUNO = MAX_ALUNO;
-    }
-
+public enum Esporte {
+    
+    //Modalidades que o sistema gerencia turmas
+    FUTEBOL("Futebol"),
+    BASQUETE ("Basquete"),
+    VOLEIBOL("Voleibol");
+    
+    private final String esporte;
     
     /**
-     * @return the turma
+     * Construtor para que se possa
+     * inicializar as Strings dos esportes
+     * @param esporte - Recebe a String respectiva
+     * do seu esporte
      */
-    public int getTurma() {
-        return turma;
-    }
-
-    /**
-     * @param turma the turma to set
-     */
-    public void setTurma(int turma) {
-        this.turma = turma;
-    }
-
-    /**
-     * @return the horario
-     */
-    public int getHorario() {
-        return horario;
-    }
-
-    /**
-     * @param horario the horario to set
-     */
-    public void setHorario(int horario) {
-        this.horario = horario;
-    }
-
-    /**
-     * @return the quantTurma
-     */
-    public int getQuantTurma() {
-        return quantTurma;
-    }
-
-    /**
-     * @param quantTurma the quantTurma to set
-     */
-    public void setQuantTurma(int quantTurma) {
-        this.quantTurma = quantTurma;
-    }
-
-    /**
-     * @return the quantAluno
-     */
-    public int getQuantAluno() {
-        return quantAluno;
-    }
-
-    /**
-     * @param quantAluno the quantAluno to set
-     */
-    public void setQuantAluno(int quantAluno) {
-        this.quantAluno = quantAluno;
-    }
-
-    /**
-     * @return the maxTurma
-     */
-    public int getMaxTurma() {
-        return MAX_TURMA;
-    }
-
-    /**
-     * @return the MAX_ALUNO
-     */
-    public int getMAX_ALUNO() {
-        return MAX_ALUNO;
+    private Esporte(String esporte){
+        this.esporte = esporte;
     }
     
-
+    /**
+     * Método para a verificação de um
+     * esporte.
+     * @return - uma String contendo a
+     * modalidade do esporte.
+     */
+    public String getEsporte(){
+        return this.esporte;
+    }
+    
+    /**
+     * Método para garantir qual o esporte
+     * será adicionado em uma turma
+     * @param esporte - String contendo a
+     * modalidade a ser buscada
+     * @return - Esporte, ou seja, a modalidade
+     * requisitada através do parâmetro.
+     */
+    public static Esporte verificarEsporte(String esporte){
+        switch(esporte){
+            case "Futebol":
+                return Esporte.FUTEBOL;
+            case "Basquete":
+                return Esporte.BASQUETE;
+            case "Voleibol":
+                return Esporte.VOLEIBOL;
+            default:
+                throw new VerifyError("Não foi possível encontrar o esporte requisitado");
+        }
+    }
 }

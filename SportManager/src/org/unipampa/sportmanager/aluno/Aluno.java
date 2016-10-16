@@ -5,32 +5,39 @@
  */
 package org.unipampa.sportmanager.aluno;
 
+import java.io.Serializable;
 /**
  *
  * @author yuryalencar
  */
-public class Aluno {
+public class Aluno implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc="Atributos">
     
     private int matricula, telefoneContato;
-    private String nomeCompleto, nomeResponsavel, endereco;
-    private long rgResponsavel;
+    private String nomeCompleto, endereco;
+    private long rg;
     
     //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="Construtor da classe">
+    //<editor-fold defaultstate="collapsed" desc="Construtores da classe">
     
     /**
      * Construtor para cadastrar um aluno no sistema.
      * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema.
-     * @param nomeResponsavel - nomeCompleto do responsável pelo aluno cadastrado.
-     * @param rgResponsavel - rg do responsável do aluno a ser cadastrado.
+     * @param rg - Documento para a identificação do aluno
      */
-    public Aluno(String nomeCompleto, String nomeResponsavel, long rgResponsavel){
+    public Aluno(String nomeCompleto, long rg){
         this.nomeCompleto = nomeCompleto;
-        this.nomeResponsavel = nomeResponsavel;
-        this.rgResponsavel = rgResponsavel;
+        this.rg = rg;
+    }
+
+    /**
+     * Construtor para cadastrar um aluno no sistema.
+     * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema.
+     */
+    public Aluno(String nomeCompleto){
+        this.nomeCompleto = nomeCompleto;
     }
 
     //</editor-fold>
@@ -49,34 +56,6 @@ public class Aluno {
      */
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
-    }
-
-    /**
-     * @return the nomeResponsavel
-     */
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    /**
-     * @param nomeResponsavel the nomeResponsavel to set
-     */
-    public void setNomeResponsavel(String nomeResponsavel) {
-        this.nomeResponsavel = nomeResponsavel;
-    }
-
-    /**
-     * @return the rgResponsavel
-     */
-    public long getRgResponsavel() {
-        return rgResponsavel;
-    }
-
-    /**
-     * @param rgResponsavel the rgResponsavel to set
-     */
-    public void setRgResponsavel(long rgResponsavel) {
-        this.rgResponsavel = rgResponsavel;
     }
 
     /**
