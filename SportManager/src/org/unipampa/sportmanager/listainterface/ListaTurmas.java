@@ -5,8 +5,14 @@
  */
 package org.unipampa.sportmanager.listainterface;
 
+//<editor-fold defaultstate="collapsed" desc="Importações">
+
 import java.util.ArrayList;
+import java.util.List;
 import org.unipampa.sportmanager.esportes.Esporte;
+import org.unipampa.sportmanager.esportes.Turma;
+
+//</editor-fold>
 
 /**
  *
@@ -16,7 +22,7 @@ public class ListaTurmas implements CrudTurmas{
 
     //<editor-fold defaultstate="collapsed" desc="Atributos">
     
-    private ArrayList<Esporte> listaEsportes = new ArrayList<>();
+    private ArrayList<Turma> listaEsportes = new ArrayList<>();
     
     //</editor-fold>
     
@@ -28,7 +34,7 @@ public class ListaTurmas implements CrudTurmas{
      * @return - retorna uma lista com todas
      * as turmas que foram cadastradas.
      */
-    public ArrayList<Esporte> getLista(){
+    public ArrayList<Turma> getLista(){
         return this.listaEsportes;
     }
     
@@ -37,12 +43,12 @@ public class ListaTurmas implements CrudTurmas{
     //<editor-fold defaultstate="collapsed" desc="Não implementados">
     
     @Override
-    public boolean incluir(Esporte esporte) {
+    public boolean incluir(Turma esporte) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean editar(String turma, Esporte esporte) {
+    public boolean editar(String turma, Turma esporte) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -52,15 +58,35 @@ public class ListaTurmas implements CrudTurmas{
     }
 
     @Override
-    public Esporte buscarTurma(String turma) {
+    public Turma buscarTurma(String turma) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ArrayList<Esporte> buscarHorario(int horario) {
+    public List<Turma> buscarEsporte(Esporte esporte) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    //</editor-fold>
+    @Override
+    public ArrayList<Turma> buscarHorario(int horario) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    @Override
+    public void ordenarTurma() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void ordenarQuantidadeAlunos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Turma> ordenarQuantidadeAlunos(Esporte esporte) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+  
+    //</editor-fold>
+
 }

@@ -5,8 +5,14 @@
  */
 package org.unipampa.sportmanager.listainterface;
 
+//<editor-fold defaultstate="collapsed" desc="Importações">
+
+import org.unipampa.sportmanager.esportes.Turma;
+import java.util.List;
 import org.unipampa.sportmanager.esportes.Esporte;
-import java.util.ArrayList;
+
+//</editor-fold>
+
 /**
  *
  * @author yuryalencar
@@ -24,18 +30,18 @@ public interface CrudTurmas {
      * Obs.: Não deve ser possível incluir 2 turmas com o
      * mesmo nome.
      */
-    public boolean incluir(Esporte esporte);
+    public boolean incluir(Turma esporte);
     
     /**
      * Método editar, recebe a turma que é única e troca
      * o objeto existente por um novo com os novos dados.
      * @param turma - Turma identificador único de turma não
      * pode deixar cadastrar duas com o mesmo nome.
-     * @param esporte - Esporte que foi editado(Objeto)
+     * @param esporte - Turma que foi editado(Objeto)
      * @return - true caso tem editado com sucesso e false
      * caso contrário.
      */
-    public boolean editar(String turma, Esporte esporte);
+    public boolean editar(String turma, Turma esporte);
     
     /**
      * Método excluir, para tirar uma turma da lista.
@@ -52,7 +58,14 @@ public interface CrudTurmas {
      * @return - retorna o esporte ou null caso o mesmo
      * não tenha sido encontrado.
      */
-    public Esporte buscarTurma(String turma);
+    public Turma buscarTurma(String turma);
+    
+    /**
+     * Método para a busca das turmas de acordo com o seu esporte
+     * @return - Uma Lista com todas as turmas de um determinado
+     * esporte
+     */
+    public List<Turma> buscarEsporte(Esporte esporte); 
     
     /**
      * Método para buscar todas as turmas de um certo horário.
@@ -60,5 +73,24 @@ public interface CrudTurmas {
      * @return - retorna uma lista com todas as turmas que são
      * do mesmo horário buscado.
      */
-    public ArrayList<Esporte> buscarHorario(int horario);
+    public List<Turma> buscarHorario(int horario);
+    
+    /**
+     * Método para ordenar a lista por turma, ou seja o número que
+     * referencia as turmas
+     */
+    public void ordenarTurma();
+    
+    /**
+     * Método para ordenar a partir da quantidade de alunos nos esportes.
+     */
+    public void ordenarQuantidadeAlunos();
+    
+    /**
+     * Método para ordenar a partir da quantidade mas neste caso de um esporte
+     * em específico.
+     * @param esporte - Esporte no qual deseja ser organizado 
+     * @return  - retorna uma lista com as turmas ordenadas do esporte escolhido
+     */
+    public List<Turma> ordenarQuantidadeAlunos(Esporte esporte);
 }
