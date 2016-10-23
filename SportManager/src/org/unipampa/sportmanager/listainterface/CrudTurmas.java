@@ -79,7 +79,7 @@ public interface CrudTurmas {
      * Método para ordenar a lista por turma, ou seja o número que
      * referencia as turmas
      */
-    public void ordenarTurma();
+    public List<Turma> ordenarTurma();
     
     /**
      * Método para ordenar a partir da quantidade de alunos nos esportes.

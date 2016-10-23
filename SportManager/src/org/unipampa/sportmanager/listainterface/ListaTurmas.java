@@ -86,34 +86,48 @@ public class ListaTurmas implements CrudTurmas {
     @Override
     public List<Turma> buscarEsporte(Esporte esporte) {
         List<Turma> esp = new ArrayList<>();
-        for (int i = 0; i < listaEsportes.size(); i++) {
-            //if (listaEsportes.get(i).get) {
-             return esp;   
+        for (Turma turm : esp) {
+            if (turm.getModalidade() == esporte) {
+                esp.add(turm);
             }
-        return null;
-    
         }
-    
+        return esp;
+    }
+
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Buscar Horario">
-    
+    @Override
+    public List<Turma> buscarHorario(int horario) {
+        List<Turma> ebs = new ArrayList<>();
+        for (Turma busc : ebs) {
+            if (busc.getHorario() == horario) {
+                ebs.add(busc);
+            }
+        }
+        return ebs;
+    }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="OrdenarTurma">
     @Override
-    public void ordenarTurma() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Turma> ordenarTurma() {
+        for (int i = 0; i < listaEsportes.size() - 1; i++) {
+            int menor = i;
+            for (int j = i + 1; j < listaEsportes.size(); j++) {
+                if (listaEsportes.get(j).getTurma() < listaEsportes.get(menor).getTurma()) {
+                    menor = j;
+                }
+            }
+            Turma aux = listaEsportes.get(menor);
+            listaEsportes.set(menor, listaEsportes.get(i));
+            listaEsportes.set(i, aux);
+        }
+        return listaEsportes;
     }
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Não implementados">
-    @Override
-    public ArrayList<Turma> buscarHorario(int horario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     
+    //<editor-fold defaultstate="collapsed" desc="Não implementados">
 
     @Override
     public void ordenarQuantidadeAlunos() {
