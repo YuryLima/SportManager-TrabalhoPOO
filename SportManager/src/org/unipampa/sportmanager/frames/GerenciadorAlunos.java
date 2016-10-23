@@ -5,17 +5,37 @@
  */
 package org.unipampa.sportmanager.frames;
 
+import org.unipampa.sportmanager.esportes.Esporte;
+
 /**
  *
  * @author yuryalencar
  */
 public class GerenciadorAlunos extends javax.swing.JFrame {
 
+    //<editor-fold defaultstate="collapsed" desc="soNumeros">
+    
+    /**
+     * Método para a verificação se no campo só contem numeros
+     * @param evt - evento key
+     */
+    private void soNumeros(java.awt.event.KeyEvent evt){
+        if(!(Character.isDigit(evt.getKeyChar()))){
+            evt.consume();
+        }
+    }
+    
+    //</editor-fold>   
     /**
      * Creates new form GerenciadorAlunos
      */
     public GerenciadorAlunos() {
         initComponents();
+        this.setTitle("Gerenciador de alunos");
+        this.setLocationRelativeTo(null);
+        for (Esporte modalidade : Esporte.values()) {
+            jComboBoxModalidadeAlunoDados.addItem(modalidade.getEsporte());
+        }
     }
 
     /**
@@ -40,6 +60,27 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jButtonVoltar = new javax.swing.JButton();
         jComboBoxTipoBusca = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
+        jTextFieldNomeAlunoDados = new javax.swing.JTextField();
+        jLabelNomeAlunoDados = new javax.swing.JLabel();
+        jTextFieldEnderecoAlunoDados = new javax.swing.JTextField();
+        jComboBoxModalidadeAlunoDados = new javax.swing.JComboBox<>();
+        jTextFieldRGAlunoDados = new javax.swing.JTextField();
+        jLabelRGAlunoDados = new javax.swing.JLabel();
+        jLabelMatriculaDados = new javax.swing.JLabel();
+        jTextFieldIdadeAlunoDados = new javax.swing.JTextField();
+        jLabelTelefoneAlunoDados = new javax.swing.JLabel();
+        jLabelEnderecoAlunoDados = new javax.swing.JLabel();
+        jLabelIdadeAlunoDados = new javax.swing.JLabel();
+        jPanelAlunoMenorDeIdade = new javax.swing.JPanel();
+        jLabelNomeRespAlunoMenorDados = new javax.swing.JLabel();
+        jTextFieldNomeRespAlunoMenorDados = new javax.swing.JTextField();
+        jLabelRGRespAlunoMenorDados = new javax.swing.JLabel();
+        jTextFieldRGRespAlunoMenorDados = new javax.swing.JTextField();
+        jFormattedTextFieldTelefoneAlunoDados = new javax.swing.JFormattedTextField();
+        jButtonSalvarAlunoDados = new javax.swing.JButton();
+        jButtonVoltarAlunoDados = new javax.swing.JButton();
+        jLabelNroMatriculaAlunoDados = new javax.swing.JLabel();
+        jLabelModalidadeAlunoDados = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,6 +90,15 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
         jLabelAluno.setText("Aluno:");
 
+        jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyTyped(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyReleased(evt);
+            }
+        });
+
         jScrollPaneAlunos.setViewportView(jListAlunos);
 
         jButtonExcluir.setText("Excluir");
@@ -56,8 +106,18 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jButtonEditar.setText("Editar");
 
         jButtonVoltar.setText("Voltar");
+        jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVoltarActionPerformed(evt);
+            }
+        });
 
-        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Matrícula" }));
+        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Matricula" }));
+        jComboBoxTipoBusca.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxTipoBuscaItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelGerenciamentoLayout = new javax.swing.GroupLayout(jPanelGerenciamento);
         jPanelGerenciamento.setLayout(jPanelGerenciamentoLayout);
@@ -66,16 +126,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
             .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelGerenciamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
-                    .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
-                        .addComponent(jButtonExcluir)
-                        .addGap(66, 66, 66)
-                        .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonVoltar))
-                    .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
-                        .addComponent(jLabelGerenciadorAlunos)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
                     .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
                         .addComponent(jButtonAdicionar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -83,7 +134,16 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxTipoBusca, 0, 1, Short.MAX_VALUE)))
+                        .addComponent(jComboBoxTipoBusca, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
+                        .addComponent(jLabelGerenciadorAlunos)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
+                        .addComponent(jButtonVoltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonEditar)
+                        .addGap(119, 119, 119)
+                        .addComponent(jButtonExcluir)))
                 .addContainerGap())
         );
         jPanelGerenciamentoLayout.setVerticalGroup(
@@ -109,15 +169,156 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
         jTabbedPaneGerenciadorAlunos.addTab("Gerenciamento", jPanelGerenciamento);
 
+        jLabelNomeAlunoDados.setText("Nome Completo:");
+
+        jTextFieldRGAlunoDados.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldRGAlunoDadosKeyTyped(evt);
+            }
+        });
+
+        jLabelRGAlunoDados.setText("RG:");
+
+        jLabelMatriculaDados.setText("Matricula:");
+
+        jTextFieldIdadeAlunoDados.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldIdadeAlunoDadosKeyTyped(evt);
+            }
+        });
+
+        jLabelTelefoneAlunoDados.setText("Telefone:");
+
+        jLabelEnderecoAlunoDados.setText("Endereço:");
+
+        jLabelIdadeAlunoDados.setText("Idade:");
+
+        jLabelNomeRespAlunoMenorDados.setText("Nome Responsavel:");
+
+        jLabelRGRespAlunoMenorDados.setText("RG do Responsavel:");
+
+        javax.swing.GroupLayout jPanelAlunoMenorDeIdadeLayout = new javax.swing.GroupLayout(jPanelAlunoMenorDeIdade);
+        jPanelAlunoMenorDeIdade.setLayout(jPanelAlunoMenorDeIdadeLayout);
+        jPanelAlunoMenorDeIdadeLayout.setHorizontalGroup(
+            jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAlunoMenorDeIdadeLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelRGRespAlunoMenorDados)
+                    .addComponent(jLabelNomeRespAlunoMenorDados))
+                .addGroup(jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelAlunoMenorDeIdadeLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jTextFieldNomeRespAlunoMenorDados))
+                    .addGroup(jPanelAlunoMenorDeIdadeLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jTextFieldRGRespAlunoMenorDados))))
+        );
+        jPanelAlunoMenorDeIdadeLayout.setVerticalGroup(
+            jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAlunoMenorDeIdadeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNomeRespAlunoMenorDados)
+                    .addComponent(jTextFieldNomeRespAlunoMenorDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelAlunoMenorDeIdadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldRGRespAlunoMenorDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRGRespAlunoMenorDados))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        try {
+            jFormattedTextFieldTelefoneAlunoDados.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        jButtonSalvarAlunoDados.setText("Salvar");
+
+        jButtonVoltarAlunoDados.setText("Voltar");
+
+        jLabelModalidadeAlunoDados.setText("Modalidade do aluno:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButtonVoltarAlunoDados)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSalvarAlunoDados))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabelModalidadeAlunoDados)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBoxModalidadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabelEnderecoAlunoDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldEnderecoAlunoDados))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabelMatriculaDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabelNroMatriculaAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabelNomeAlunoDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldNomeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabelIdadeAlunoDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldIdadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabelRGAlunoDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldRGAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabelTelefoneAlunoDados)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jFormattedTextFieldTelefoneAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelNroMatriculaAlunoDados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelMatriculaDados)
+                        .addComponent(jLabelNomeAlunoDados)
+                        .addComponent(jTextFieldNomeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldIdadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelIdadeAlunoDados)
+                    .addComponent(jTextFieldRGAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRGAlunoDados)
+                    .addComponent(jFormattedTextFieldTelefoneAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelTelefoneAlunoDados))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelEnderecoAlunoDados)
+                    .addComponent(jTextFieldEnderecoAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxModalidadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelModalidadeAlunoDados))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSalvarAlunoDados)
+                    .addComponent(jButtonVoltarAlunoDados))
+                .addContainerGap())
         );
 
         jTabbedPaneGerenciadorAlunos.addTab("Dados", jPanel2);
@@ -135,6 +336,39 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldIdadeAlunoDadosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIdadeAlunoDadosKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldIdadeAlunoDadosKeyTyped
+
+    private void jTextFieldRGAlunoDadosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldRGAlunoDadosKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldRGAlunoDadosKeyTyped
+
+    private void jTextFieldBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyReleased
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTextFieldBuscaKeyReleased
+
+    private void jComboBoxTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoBuscaItemStateChanged
+        // TODO add your handling code here:
+        jTextFieldBusca.setText("");
+    }//GEN-LAST:event_jComboBoxTipoBuscaItemStateChanged
+
+    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
+        // TODO add your handling code here:
+        new Inicial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonVoltarActionPerformed
+
+    private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
+        // TODO add your handling code here:
+        if(jComboBoxTipoBusca.getSelectedItem().toString().equalsIgnoreCase("Matricula")){
+            soNumeros(evt);
+        }
+    }//GEN-LAST:event_jTextFieldBuscaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -175,15 +409,36 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAdicionar;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonSalvarAlunoDados;
     private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JButton jButtonVoltarAlunoDados;
+    private javax.swing.JComboBox<String> jComboBoxModalidadeAlunoDados;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
+    private javax.swing.JFormattedTextField jFormattedTextFieldTelefoneAlunoDados;
     private javax.swing.JLabel jLabelAluno;
+    private javax.swing.JLabel jLabelEnderecoAlunoDados;
     private javax.swing.JLabel jLabelGerenciadorAlunos;
+    private javax.swing.JLabel jLabelIdadeAlunoDados;
+    private javax.swing.JLabel jLabelMatriculaDados;
+    private javax.swing.JLabel jLabelModalidadeAlunoDados;
+    private javax.swing.JLabel jLabelNomeAlunoDados;
+    private javax.swing.JLabel jLabelNomeRespAlunoMenorDados;
+    private javax.swing.JLabel jLabelNroMatriculaAlunoDados;
+    private javax.swing.JLabel jLabelRGAlunoDados;
+    private javax.swing.JLabel jLabelRGRespAlunoMenorDados;
+    private javax.swing.JLabel jLabelTelefoneAlunoDados;
     private javax.swing.JList<String> jListAlunos;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelAlunoMenorDeIdade;
     private javax.swing.JPanel jPanelGerenciamento;
     private javax.swing.JScrollPane jScrollPaneAlunos;
     private javax.swing.JTabbedPane jTabbedPaneGerenciadorAlunos;
     private javax.swing.JTextField jTextFieldBusca;
+    private javax.swing.JTextField jTextFieldEnderecoAlunoDados;
+    private javax.swing.JTextField jTextFieldIdadeAlunoDados;
+    private javax.swing.JTextField jTextFieldNomeAlunoDados;
+    private javax.swing.JTextField jTextFieldNomeRespAlunoMenorDados;
+    private javax.swing.JTextField jTextFieldRGAlunoDados;
+    private javax.swing.JTextField jTextFieldRGRespAlunoMenorDados;
     // End of variables declaration//GEN-END:variables
 }

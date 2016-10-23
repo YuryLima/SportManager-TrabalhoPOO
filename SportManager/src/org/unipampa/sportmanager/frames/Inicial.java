@@ -5,6 +5,9 @@
  */
 package org.unipampa.sportmanager.frames;
 
+import javax.swing.JOptionPane;
+import jdk.nashorn.internal.scripts.JO;
+
 /**
  *
  * @author yuryalencar
@@ -18,7 +21,7 @@ public class Inicial extends javax.swing.JFrame {
         initComponents();
         
         this.setLocationRelativeTo(null);
-        this.setTitle("SportManager - Trabalho POO");
+        this.setTitle("Gerenciador de esportes - Trabalho POO");
     }
 
     /**
@@ -30,21 +33,94 @@ public class Inicial extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelInicial = new javax.swing.JPanel();
+        jButtonGerenciadorDeAlunos = new javax.swing.JButton();
+        jButtonGerenciadorTurmas = new javax.swing.JButton();
+        jMenuBarInicial = new javax.swing.JMenuBar();
+        jMenuOpcoes = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButtonGerenciadorDeAlunos.setText("Gerenciador de alunos");
+        jButtonGerenciadorDeAlunos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGerenciadorDeAlunosActionPerformed(evt);
+            }
+        });
+
+        jButtonGerenciadorTurmas.setText("Gerenciador de turmas");
+        jButtonGerenciadorTurmas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGerenciadorTurmasActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelInicialLayout = new javax.swing.GroupLayout(jPanelInicial);
+        jPanelInicial.setLayout(jPanelInicialLayout);
+        jPanelInicialLayout.setHorizontalGroup(
+            jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInicialLayout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addGroup(jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonGerenciadorTurmas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonGerenciadorDeAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
+        );
+        jPanelInicialLayout.setVerticalGroup(
+            jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicialLayout.createSequentialGroup()
+                .addContainerGap(186, Short.MAX_VALUE)
+                .addComponent(jButtonGerenciadorTurmas)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonGerenciadorDeAlunos)
+                .addGap(25, 25, 25))
+        );
+
+        jMenuOpcoes.setText("Opções");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem1.setText("Ajuda");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuOpcoes.add(jMenuItem1);
+
+        jMenuBarInicial.add(jMenuOpcoes);
+
+        setJMenuBar(jMenuBarInicial);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanelInicial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanelInicial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonGerenciadorDeAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorDeAlunosActionPerformed
+        // TODO add your handling code here:
+        new GerenciadorAlunos().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonGerenciadorDeAlunosActionPerformed
+
+    private void jButtonGerenciadorTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorTurmasActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButtonGerenciadorTurmasActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Ajuda");
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -82,5 +158,11 @@ public class Inicial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonGerenciadorDeAlunos;
+    private javax.swing.JButton jButtonGerenciadorTurmas;
+    private javax.swing.JMenuBar jMenuBarInicial;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu jMenuOpcoes;
+    private javax.swing.JPanel jPanelInicial;
     // End of variables declaration//GEN-END:variables
 }

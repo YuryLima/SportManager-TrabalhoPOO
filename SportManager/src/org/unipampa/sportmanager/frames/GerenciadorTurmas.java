@@ -9,13 +9,15 @@ package org.unipampa.sportmanager.frames;
  *
  * @author junio
  */
-public class Turma extends javax.swing.JFrame {
+public class GerenciadorTurmas extends javax.swing.JFrame {
 
     /**
      * Creates new form Turma
      */
-    public Turma() {
+    public GerenciadorTurmas() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Gerenciador de turmas");
     }
 
     /**
@@ -60,20 +62,21 @@ public class Turma extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Turma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerenciadorTurmas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Turma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerenciadorTurmas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Turma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerenciadorTurmas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Turma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerenciadorTurmas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Turma().setVisible(true);
+                new GerenciadorTurmas().setVisible(true);
             }
         });
     }
