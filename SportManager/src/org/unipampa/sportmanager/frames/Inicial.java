@@ -7,6 +7,10 @@ package org.unipampa.sportmanager.frames;
 
 import javax.swing.JOptionPane;
 import jdk.nashorn.internal.scripts.JO;
+import org.unipampa.sportmanager.listainterface.CrudAluno;
+import org.unipampa.sportmanager.listainterface.CrudTurma;
+import org.unipampa.sportmanager.listainterface.ListaAlunos;
+import org.unipampa.sportmanager.listainterface.ListaTurmas;
 
 /**
  *
@@ -14,6 +18,9 @@ import jdk.nashorn.internal.scripts.JO;
  */
 public class Inicial extends javax.swing.JFrame {
 
+    CrudAluno listaAlunos = new ListaAlunos();
+    CrudTurma listaturmas = new ListaTurmas();
+    
     /**
      * Creates new form Inicial
      */
@@ -108,7 +115,7 @@ public class Inicial extends javax.swing.JFrame {
 
     private void jButtonGerenciadorDeAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorDeAlunosActionPerformed
         // TODO add your handling code here:
-        new GerenciadorAlunos().setVisible(true);
+        new GerenciadorAlunos(listaAlunos).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorDeAlunosActionPerformed
 
