@@ -62,7 +62,7 @@ public class ListaAlunos implements CrudAluno {
     public List<Aluno> buscarNome(String nome) {
         List<Aluno> name = new ArrayList<>();
         for (int i = 0; i < listaAlunos.size(); i++) {
-            if(listaAlunos.get(i).getNomeCompleto().contains(nome)){
+            if(listaAlunos.get(i).getNomeCompleto().toLowerCase().contains(nome.toLowerCase())){
                 name.add(listaAlunos.get(i));
             }    
         }
