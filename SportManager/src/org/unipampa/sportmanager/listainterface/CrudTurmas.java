@@ -41,7 +41,7 @@ public interface CrudTurmas {
      * @return - true caso tem editado com sucesso e false
      * caso contrário.
      */
-    public boolean editar(String turma, Turma esporte);
+    public boolean editar(int turma, Turma esporte);
     
     /**
      * Método excluir, para tirar uma turma da lista.
@@ -49,7 +49,7 @@ public interface CrudTurmas {
      * @return - true caso tenha excluído com sucesso e false
      * caso não tenha conseguido ou turma não encontrada
      */
-    public boolean excluir(String turma);
+    public boolean excluir(int turma);
     
     /**
      * Busca por turma sendo que turma é um identificador
@@ -58,7 +58,7 @@ public interface CrudTurmas {
      * @return - retorna o esporte ou null caso o mesmo
      * não tenha sido encontrado.
      */
-    public Turma buscarTurma(String turma);
+    public Turma buscarTurma(int turma);
     
     /**
      * Método para a busca das turmas de acordo com o seu esporte
