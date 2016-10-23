@@ -14,7 +14,7 @@ public class Aluno implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc="Atributos">
     
-    private int matricula, telefoneContato;
+    private int matricula, telefoneContato, idade;
     private String nomeCompleto, endereco;
     private long rg;
     
@@ -24,20 +24,24 @@ public class Aluno implements Serializable {
     
     /**
      * Construtor para cadastrar um aluno no sistema.
-     * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema.
-     * @param rg - Documento para a identificação do aluno
+     * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema, tipo String.
+     * @param rg - Documento para a identificação do aluno tipo long
+     * @param idade - idade do aluno a ser adicionado tipo int
      */
-    public Aluno(String nomeCompleto, long rg){
+    public Aluno(String nomeCompleto, long rg, int idade){
         this.nomeCompleto = nomeCompleto;
         this.rg = rg;
+        this.idade = idade;
     }
 
     /**
      * Construtor para cadastrar um aluno no sistema.
-     * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema.
+     * @param nomeCompleto - nomeCompleto do aluno a ser cadastrado no sistema tipo String.
+     * @param idade - idade do aluno a ser adicionado tipo int
      */
-    public Aluno(String nomeCompleto){
+    public Aluno(String nomeCompleto, int idade){
         this.nomeCompleto = nomeCompleto;
+        this.idade = idade;
     }
 
     //</editor-fold>
@@ -80,6 +84,13 @@ public class Aluno implements Serializable {
     }
 
     /**
+     * @return the idade
+     */
+    public int getIdade() {
+        return idade;
+    }
+
+    /**
      * @return the telefoneContato
      */
     public int getTelefoneContato() {
@@ -91,6 +102,13 @@ public class Aluno implements Serializable {
      */
     public void setTelefoneContato(int telefoneContato) {
         this.telefoneContato = telefoneContato;
+    }
+
+    /**
+     * @param idade the idade to set
+     */
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 
     //</editor-fold>

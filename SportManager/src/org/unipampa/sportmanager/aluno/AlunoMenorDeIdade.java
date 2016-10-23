@@ -27,9 +27,10 @@ public class AlunoMenorDeIdade extends Aluno{
      * @param nomeCompleto - String nome completo do aluno
      * @param nomeResponsavel - String nome completo do responsável pelo mesmo
      * @param rgResponsavel - long documento do responsável pelo aluno
+     * @param idade - Tipo:int idade do aluno.
      */
-    public AlunoMenorDeIdade(String nomeCompleto, String nomeResponsavel, long rgResponsavel) {
-        super(nomeCompleto);
+    public AlunoMenorDeIdade(String nomeCompleto, String nomeResponsavel, long rgResponsavel, int idade) {
+        super(nomeCompleto, idade);
         this.nomeResponsavel = nomeResponsavel;
         this.rgResponsavel = rgResponsavel;
     }
@@ -43,16 +44,17 @@ public class AlunoMenorDeIdade extends Aluno{
      * @param rgResponsavel - long com o documento do responsável
      * @param endereco - String contendo o endereço para do aluno
      * @param telefoneContato - int contendo o número de contato
+     * @param idade - Tipo:int idade do aluno.
      */
     public AlunoMenorDeIdade(String nomeCompleto, long rg,  String nomeResponsavel, long rgResponsavel
-                    ,String endereco , int telefoneContato) {
-        super(nomeCompleto, rg);
+                    ,String endereco , int telefoneContato, int idade) {
+        super(nomeCompleto, rg, idade);
         this.nomeResponsavel = nomeResponsavel;
         this.rgResponsavel = rgResponsavel;
-        setEndereco(endereco);
-        setTelefoneContato(telefoneContato);
+        super.setEndereco(endereco);
+        super.setTelefoneContato(telefoneContato);
     }
     
-    //</editor-fold>
+     //</editor-fold>
     
 }
