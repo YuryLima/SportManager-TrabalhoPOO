@@ -6,17 +6,19 @@
 package org.unipampa.sportmanager.aluno;
 
 import java.io.Serializable;
+
 /**
  *
  * @author yuryalencar
  */
-public class Aluno implements Serializable {
-    
+public class Aluno implements Serializable{
+
     //<editor-fold defaultstate="collapsed" desc="Atributos">
-    
-    private int matricula, telefoneContato, idade;
+
+    private static int sequence = 0;
+    private int matricula,  idade;
     private String nomeCompleto, endereco;
-    private long rg;
+    private long telefoneContato, rg;
     
     //</editor-fold>
     
@@ -29,9 +31,8 @@ public class Aluno implements Serializable {
      * @param idade - idade do aluno a ser adicionado tipo int
      */
     public Aluno(String nomeCompleto, long rg, int idade){
-        this.nomeCompleto = nomeCompleto;
+        this(nomeCompleto, idade);
         this.rg = rg;
-        this.idade = idade;
     }
 
     /**
@@ -42,12 +43,32 @@ public class Aluno implements Serializable {
     public Aluno(String nomeCompleto, int idade){
         this.nomeCompleto = nomeCompleto;
         this.idade = idade;
+        this.matricula = this.sequence++;
+        this.endereco="";
+        this.telefoneContato=0;
+        this.rg = 0;
     }
 
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
+
+    /**
+     * @return the rg
+     */
+    public long getRg() {
+        return rg;
+    }
+
+    /**
+     * 
+     * @return  the sequence
+     */
+    public static int getSequence() {
+        return sequence;
+    }
     
+
     /**
      * @return the nomeCompleto
      */
@@ -93,14 +114,14 @@ public class Aluno implements Serializable {
     /**
      * @return the telefoneContato
      */
-    public int getTelefoneContato() {
+    public long getTelefoneContato() {
         return telefoneContato;
     }
 
     /**
      * @param telefoneContato the telefoneContato to set
      */
-    public void setTelefoneContato(int telefoneContato) {
+    public void setTelefoneContato(long telefoneContato) {
         this.telefoneContato = telefoneContato;
     }
 
@@ -111,6 +132,21 @@ public class Aluno implements Serializable {
         this.idade = idade;
     }
 
+    /**
+     * @param rg the rg to set
+     */
+    public void setRg(long rg) {
+        this.rg = rg;
+    }
+    
+
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="toString, clone">
+    
+    @Override
+    public String toString(){
+        return this.matricula+" - "+this.nomeCompleto+" - "+this.idade;
+    }
+    //</editor-fold>
 }

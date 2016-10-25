@@ -17,7 +17,7 @@ import org.unipampa.sportmanager.esportes.Turma;
  *
  * @author yuryalencar
  */
-public class ListaTurmas implements CrudTurmas {
+public class ListaTurmas implements CrudTurma {
 
     //<editor-fold defaultstate="collapsed" desc="Atributos">
     private ArrayList<Turma> listaEsportes = new ArrayList<>();

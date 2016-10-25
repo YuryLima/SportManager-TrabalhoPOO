@@ -206,5 +206,13 @@ public class Turma {
     }
     
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="toString">
+    
+    public String toString(){
+        return this.turma+" - "+this.modalidade.getEsporte()+" - MAXIMO DE ALUNOS: "+this.MAX_ALUNO+" - ALUNOS: "+getQuantidadeAlunos();
+    }
+    
+    //</editor-fold>
 
 }

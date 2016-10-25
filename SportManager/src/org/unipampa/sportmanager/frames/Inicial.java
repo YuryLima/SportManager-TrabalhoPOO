@@ -19,7 +19,7 @@ import org.unipampa.sportmanager.listainterface.ListaTurmas;
 public class Inicial extends javax.swing.JFrame {
 
     CrudAluno listaAlunos = new ListaAlunos();
-    CrudTurma listaturmas = new ListaTurmas();
+    CrudTurma listaTurmas = new ListaTurmas();
     
     /**
      * Creates new form Inicial
@@ -45,7 +45,8 @@ public class Inicial extends javax.swing.JFrame {
         jButtonGerenciadorTurmas = new javax.swing.JButton();
         jMenuBarInicial = new javax.swing.JMenuBar();
         jMenuOpcoes = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemAjudaTurmas = new javax.swing.JMenuItem();
+        jMenuItemAjudaAlunos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,14 +87,23 @@ public class Inicial extends javax.swing.JFrame {
 
         jMenuOpcoes.setText("Opções");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem1.setText("Ajuda");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAjudaTurmas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAjudaTurmas.setText("Ajuda com o Gerenciador de turmas");
+        jMenuItemAjudaTurmas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemAjudaTurmasActionPerformed(evt);
             }
         });
-        jMenuOpcoes.add(jMenuItem1);
+        jMenuOpcoes.add(jMenuItemAjudaTurmas);
+
+        jMenuItemAjudaAlunos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAjudaAlunos.setText("Ajuda com o Gerenciador de alunos");
+        jMenuItemAjudaAlunos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAjudaAlunosActionPerformed(evt);
+            }
+        });
+        jMenuOpcoes.add(jMenuItemAjudaAlunos);
 
         jMenuBarInicial.add(jMenuOpcoes);
 
@@ -115,19 +125,25 @@ public class Inicial extends javax.swing.JFrame {
 
     private void jButtonGerenciadorDeAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorDeAlunosActionPerformed
         // TODO add your handling code here:
-        new GerenciadorAlunos(listaAlunos).setVisible(true);
+        new GerenciadorAlunos(listaAlunos, listaTurmas).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorDeAlunosActionPerformed
 
     private void jButtonGerenciadorTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorTurmasActionPerformed
         // TODO add your handling code here:
-        
+        new GerenciadorTurmas().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorTurmasActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemAjudaTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjudaTurmasActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Ajuda");
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        JOptionPane.showMessageDialog(null, "Ajuda turmas");
+    }//GEN-LAST:event_jMenuItemAjudaTurmasActionPerformed
+
+    private void jMenuItemAjudaAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjudaAlunosActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Ajuda alunos");
+    }//GEN-LAST:event_jMenuItemAjudaAlunosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,7 +184,8 @@ public class Inicial extends javax.swing.JFrame {
     private javax.swing.JButton jButtonGerenciadorDeAlunos;
     private javax.swing.JButton jButtonGerenciadorTurmas;
     private javax.swing.JMenuBar jMenuBarInicial;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItemAjudaAlunos;
+    private javax.swing.JMenuItem jMenuItemAjudaTurmas;
     private javax.swing.JMenu jMenuOpcoes;
     private javax.swing.JPanel jPanelInicial;
     // End of variables declaration//GEN-END:variables

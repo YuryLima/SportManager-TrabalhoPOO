@@ -81,6 +81,18 @@ public class ListaAlunos implements CrudAluno {
         return null;
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getLista">
+    
+    /**
+     * Método para pegar toda a lista de alunos
+     * @return - retorna a lista de alunos
+     */
+    public List<Aluno> getLista(){
+        return this.listaAlunos;
+    }
+    
+    //</editor-fold>
       
     //</editor-fold>
     
