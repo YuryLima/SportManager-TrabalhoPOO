@@ -31,8 +31,8 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Gerenciador de turmas");
-        this.listaTurmas = (ListaTurmas)listaTurmas;
-        
+        this.listaTurmas = (ListaTurmas) listaTurmas;
+
         jTabbedPane1.setEnabledAt(1, false);
         jTabbedPane1.setEnabledAt(2, false);
 
@@ -78,7 +78,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         //Aluno 
 
     }
-    
+
     private void listar() {
         DefaultListModel modelo = new DefaultListModel();
         List<Turma> listaTurm = this.listaTurmas.getLista();
@@ -491,12 +491,12 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonSalvarTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarTurmaActionPerformed
         // TODO add your handling code here:
-        int hora=0;
-        String newHora="";
-        if(!jFormattedHorario.getText().equals("")){
-            String horaString = jFormattedHorario.getText();
+        String horaString = jFormattedHorario.getText();
+        int hora = 0;
+        String newHora = "";
+        if (!jFormattedHorario.getText().equals("  :  ")) {
             for (int i = 0; i < horaString.length(); i++) {
-                if(horaString.charAt(i)!=':'){
+                if (horaString.charAt(i) != ':') {
                     newHora += horaString.charAt(i);
                 }
             }
@@ -505,11 +505,25 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         if (jTextFieldMaiorIdade.getText().equals("") || jTextFieldMenorIdade.getText().equals("")
                 || jTextFieldMaxAlunos.getText().equals("") || jFormattedHorario.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha os Campos");
-           
-        }else if(Integer.parseInt(jTextFieldMenorIdade.getText()) >= Integer.parseInt(jTextFieldMaiorIdade.getText())){ 
+
+        } else if (Integer.parseInt(jTextFieldMenorIdade.getText()) >= Integer.parseInt(jTextFieldMaiorIdade.getText())) {
             JOptionPane.showMessageDialog(null, "Menor Idade maior ou igual com a Maior Idade");
-        }else if(!jFormattedHorario.getText().equals("")){    
-        }else {
+        } else if (!jFormattedHorario.getText().equals("")) {
+            int end = 0;
+            String horaS= "", minutos="";
+            for (int i = 0; i < horaString.length(); i++) {
+                if (horaString.charAt(i) == ':') {
+                    end = i;
+                    break;
+                }
+            }
+            horaS = horaString.substring(0, end);
+            minutos = horaString.substring(end+1, horaString.length());
+            if(Integer.parseInt(horaS) > 23 ||Integer.parseInt(minutos) > 59){
+                JOptionPane.showMessageDialog(null, "Hora Inválida");
+                jFormattedHorario.setText("");
+            }            
+        } else {
 
             Turma turm = new Turma(hora,
                     Esporte.verificarEsporte(jComboBoxModalidade.getSelectedItem().toString()),
@@ -523,7 +537,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
             jTabbedPane1.setSelectedIndex(0);
             jTabbedPane1.setEnabledAt(1, false);
-            
+
             JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
         }
     }//GEN-LAST:event_jButtonSalvarTurmaActionPerformed

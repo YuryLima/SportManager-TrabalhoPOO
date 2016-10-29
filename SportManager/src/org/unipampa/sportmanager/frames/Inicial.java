@@ -131,7 +131,7 @@ public class Inicial extends javax.swing.JFrame {
 
     private void jButtonGerenciadorTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorTurmasActionPerformed
         // TODO add your handling code here:
-        new GerenciadorTurmas().setVisible(true);
+        new GerenciadorTurmas(this.listaTurmas).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorTurmasActionPerformed
 
