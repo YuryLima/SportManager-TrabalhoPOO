@@ -6,11 +6,13 @@
 package org.unipampa.sportmanager.frames;
 
 import java.awt.PopupMenu;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.unipampa.sportmanager.aluno.Aluno;
 import org.unipampa.sportmanager.esportes.Esporte;
 import org.unipampa.sportmanager.esportes.Turma;
+import org.unipampa.sportmanager.listainterface.CrudTurma;
 import org.unipampa.sportmanager.listainterface.ListaTurmas;
 
 /**
@@ -25,11 +27,12 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     /**
      * Creates new form Turma
      */
-    public GerenciadorTurmas() {
+    public GerenciadorTurmas(CrudTurma listaTurmas) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Gerenciador de turmas");
-
+        this.listaTurmas = (ListaTurmas)listaTurmas;
+        
         jTabbedPane1.setEnabledAt(1, false);
         jTabbedPane1.setEnabledAt(2, false);
 
@@ -74,6 +77,17 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         DefaultListModel listModell = new DefaultListModel();
         //Aluno 
 
+    }
+    
+    private void listar() {
+        DefaultListModel modelo = new DefaultListModel();
+        List<Turma> listaTurm = this.listaTurmas.getLista();
+
+        for (Turma turma : listaTurm) {
+            modelo.addElement(turma.toString());
+        }
+
+        jListTurmas.setModel(modelo);
     }
 
 
@@ -491,7 +505,11 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         if (jTextFieldMaiorIdade.getText().equals("") || jTextFieldMenorIdade.getText().equals("")
                 || jTextFieldMaxAlunos.getText().equals("") || jFormattedHorario.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha os Campos");
-        } else {
+           
+        }else if(Integer.parseInt(jTextFieldMenorIdade.getText()) >= Integer.parseInt(jTextFieldMaiorIdade.getText())){ 
+            JOptionPane.showMessageDialog(null, "Menor Idade maior ou igual com a Maior Idade");
+        }else if(!jFormattedHorario.getText().equals("")){    
+        }else {
 
             Turma turm = new Turma(hora,
                     Esporte.verificarEsporte(jComboBoxModalidade.getSelectedItem().toString()),
@@ -501,6 +519,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
             listaTurmas.incluir(turm);
             limparCampos();
+            listar();
 
             jTabbedPane1.setSelectedIndex(0);
             jTabbedPane1.setEnabledAt(1, false);
@@ -560,7 +579,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GerenciadorTurmas().setVisible(true);
+                new GerenciadorTurmas(null).setVisible(true);
             }
         });
     }
