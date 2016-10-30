@@ -106,6 +106,13 @@ public class Turma {
     }
     
     /**
+     * 
+     */
+    public static void setSequence(int newSequence) {
+        sequence = newSequence;
+    }
+    
+    /**
      * @return the menorIdade
      */
     public int getMenorIdade() {

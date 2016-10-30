@@ -70,6 +70,14 @@ public class Aluno implements Serializable{
     
 
     /**
+     * 
+     */
+    public static void setSequence(int newSequence) {
+        sequence = newSequence;
+    }
+    
+
+    /**
      * @return the nomeCompleto
      */
     public String getNomeCompleto() {
