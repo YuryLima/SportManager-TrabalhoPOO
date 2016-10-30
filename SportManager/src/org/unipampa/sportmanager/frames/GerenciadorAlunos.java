@@ -5,27 +5,100 @@
  */
 package org.unipampa.sportmanager.frames;
 
+//<editor-fold defaultstate="collapsed" desc="Importações">
+
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.unipampa.sportmanager.aluno.Aluno;
 import org.unipampa.sportmanager.aluno.AlunoMenorDeIdade;
-import org.unipampa.sportmanager.esportes.Esporte;
-import org.unipampa.sportmanager.esportes.Turma;
 import org.unipampa.sportmanager.listainterface.*;
+
+//</editor-fold>
 
 /**
  *
  * @author yuryalencar
+ * @author Lucas
+ * @author junio
  */
 public class GerenciadorAlunos extends javax.swing.JFrame {
 
+    //<editor-fold defaultstate="collapsed" desc="Variáveis da Classe">
+    
     private ListaAlunos listaAlunos;
     private ListaTurmas listaTurmas;
     private boolean isEdit;
     
-    //<editor-fold defaultstate="collapsed" desc="soNumeros, mudarAbas, listar(normal, nome, matricula), verificação, limparCampos, getCod, preencherCampos">
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Métodos">
+    
+    /**
+     * Método para a criação de um objeto do tipo
+     * aluno , que pode ser tanto aluno menor de idade quanto aluno maior de idade
+     * @return - o objeto do tipo aluno, ou null caso aconteça algum problema.
+     */
+    private Aluno createAluno(){
+        Aluno a = null;
+        Long rg = 0L; 
+        long telefone = 0;
+        
+        if(!jTextFieldRGAlunoDados.getText().trim().equals("")){
+            rg = Long.parseLong(jTextFieldRGAlunoDados.getText().trim());
+        }
+        
+        if(!jFormattedTextFieldTelefoneAlunoDados.getText().equals("(  )    -    ")){
+            String aux="", telefoneString=jFormattedTextFieldTelefoneAlunoDados.getText().trim();
+            for (int i = 0; i < telefoneString.length(); i++) {
+                if(Character.isDigit(telefoneString.charAt(i))){
+                    aux += telefoneString.charAt(i);
+                }
+            }
+            telefone = Long.parseLong(aux);
+        }
+        
+        //Verificando se o campo idade foi preenchido para que assim possa saber se o aluno
+        //é menor de idade ou não
+        if(!jTextFieldIdadeAlunoDados.getText().trim().equals("")){
+            //Verificando a idade do aluno caso seja maior de idade cria um objeto aluno
+            if(Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 18){
+                if(!jTextFieldNomeAlunoDados.getText().trim().equals("")){
+
+                    a = new Aluno(jTextFieldNomeAlunoDados.getText(), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
+                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
+                    a.setTelefoneContato(telefone);
+                    a.setRg(rg);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                }
+            //Caso o aluno seja menor de idade     
+            } else {
+                //Verificando se os alunos menores de idade possuem os dados mínimos
+                if(jTextFieldNomeAlunoDados.getText().trim().equals("") || jTextFieldNomeRespAlunoMenorDados.getText().trim().equals("")
+                        || jTextFieldRGRespAlunoMenorDados.getText().trim().equals("")){
+                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                } else {
+                    a = new AlunoMenorDeIdade(jTextFieldNomeAlunoDados.getText(), jTextFieldNomeRespAlunoMenorDados.getText()
+                            , Long.parseLong(jTextFieldRGRespAlunoMenorDados.getText()), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
+                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
+                    a.setTelefoneContato(telefone);
+                    a.setRg(rg);
+                }
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+        }
+        return a;
+    }
+    
+    /**
+     * Método para preeencher os campos quando um aluno
+     * vai ser editado ou visualizado.
+     * @param cod - Tipo:int é a mesma coisa que a matrícula do
+     * aluno , cada um tem o seu.
+     */
     private void preencherCampos(int cod){
         Aluno aluno = listaAlunos.buscarMatricula(cod);
         
@@ -33,8 +106,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jTextFieldNomeAlunoDados.setText(aluno.getNomeCompleto());
         jTextFieldRGAlunoDados.setText(String.valueOf(aluno.getRg()));
         jTextFieldIdadeAlunoDados.setText(String.valueOf(aluno.getIdade()));
-        jFormattedTextFieldTelefoneAlunoDados.setText(String.valueOf(aluno.getTelefoneContato()));
         jLabelNroMatriculaAlunoDados.setText(String.valueOf(aluno.getMatricula()));
+        
+        if(aluno.getTelefoneContato() !=0 ){
+            jFormattedTextFieldTelefoneAlunoDados.setText(String.valueOf(aluno.getTelefoneContato()));
+        }
         
         if(aluno.getIdade() < 18) {
             AlunoMenorDeIdade alunoMenor = (AlunoMenorDeIdade) aluno;
@@ -43,6 +119,13 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Método para desativar os campos, utilizado para 
+     * visualizar os detalhes de um Aluno.
+     * @param cod - Tipo:int matrícula do aluno para a busca 
+     * do mesmo, utilizado para verificar se o aluno é maior
+     * ou menor de idade para tirar a parte dos alunos de menor.
+     */
     private void desativarCampos(int cod){
         Aluno aluno = listaAlunos.buscarMatricula(cod);
         
@@ -51,13 +134,14 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jTextFieldIdadeAlunoDados.setEnabled(false);
         jTextFieldRGAlunoDados.setEnabled(false);
         jFormattedTextFieldTelefoneAlunoDados.setEnabled(false);
-        jLabelNroMatriculaAlunoDados.setEnabled(false);
         
         if(aluno.getIdade() < 18) {
             jTextFieldNomeRespAlunoMenorDados.setEnabled(false);
             jTextFieldRGRespAlunoMenorDados.setEnabled(false);
             jTextFieldNomeRespAlunoMenorDados.setVisible(true);
             jTextFieldRGRespAlunoMenorDados.setVisible(true);
+            jLabelNomeRespAlunoMenorDados.setVisible(true);
+            jLabelRGRespAlunoMenorDados.setVisible(true);
         } else {
             jLabelNomeRespAlunoMenorDados.setVisible(false);
             jLabelRGRespAlunoMenorDados.setVisible(false);
@@ -68,6 +152,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jButtonSalvarAlunoDados.setVisible(false);
     }
     
+    /**
+     * Método para ativar todos o campos, inclusive ativar os
+     * referentes à um aluno menor de idade, que pode ser desativado
+     * com o desativarCampos.
+     */
     private void ativarCampos(){
         
         jTextFieldEnderecoAlunoDados.setEnabled(true);
@@ -87,6 +176,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jButtonSalvarAlunoDados.setVisible(true);
     }
     
+    /**
+     * Método para limpar os campos quando se termina uma edição ou,
+     * adição.
+     */
     private void limparCampos(){
         jTextFieldEnderecoAlunoDados.setText("");
         jTextFieldIdadeAlunoDados.setText("");
@@ -97,12 +190,23 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jFormattedTextFieldTelefoneAlunoDados.setText("");
     }
     
+    /**
+     * Método para fazer alguma verificação, com
+     * um JOPtionPane com sim e não.
+     * @param message - Tipo:String, contendo a mensagem
+     * para a verificação.
+     * @return - true caso a resposta tem sido sim e 
+     * false caso contrário.
+     */
     private boolean verificacao(String message){
         int resposta = JOptionPane.showConfirmDialog(null, message, "Verificação",
                 JOptionPane.YES_NO_OPTION);
         return resposta == JOptionPane.YES_OPTION;
     }
     
+    /**
+     * Método para listar todos os alunos cadastrados.
+     */
     private void listar(){
         DefaultListModel listModel = new DefaultListModel();
         List<Aluno> listaAlunos = this.listaAlunos.getLista();
@@ -114,6 +218,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jListAlunos.setModel(listModel);
     }
     
+    /**
+     * Método para listar todos os alunos cadastrados, de 
+     * acordo com a pesquisa do seu nome.
+     */
     private void listarNome(){
         DefaultListModel listModel = new DefaultListModel();
         List<Aluno> listaAlunos = this.listaAlunos.buscarNome(jTextFieldBusca.getText());
@@ -128,6 +236,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Nenhum aluno foi encontrado!");
     }
     
+    /**
+     * Método para listar todos os alunos cadastrados de acordo 
+     * com uma pesquisa realizada pela sua matrícula.
+     */
     private void listarMatricula(){
         DefaultListModel listModel = new DefaultListModel();
         Aluno aluno = listaAlunos.buscarMatricula(Integer.parseInt(jTextFieldBusca.getText()));
@@ -162,10 +274,12 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jTabbedPaneGerenciadorAlunos.setEnabledAt(chegada, true);
     }
     
-    //</editor-fold>   
-    
-    //<editor-fold defaultstate="collapsed" desc="getCod">
-    
+    /**
+     * Método para se extrair o código(Matrícula)
+     * de um toString() e de um aluno.
+     * @return - Tipo:int , retorna o valor
+     * de uma matrícula.
+     */
     private int getCod(){
         String cod="", extract = jListAlunos.getSelectedValue();
         
@@ -179,8 +293,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         
         return Integer.parseInt(cod);
     }
-
+    
     //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="initComponents">
     
     /**
      * Creates new form GerenciadorAlunos
@@ -188,24 +304,23 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     public GerenciadorAlunos(CrudAluno listaAlunos, CrudTurma listaTurmas) {
         initComponents();
         this.setTitle("Gerenciador de alunos");
+        this.setLocationRelativeTo(null);
         
         this.listaAlunos = (ListaAlunos) listaAlunos;
         this.listaTurmas = (ListaTurmas) listaTurmas;
-        this.setLocationRelativeTo(null);
         
         jTabbedPaneGerenciadorAlunos.setEnabledAt(0, true);
         jTabbedPaneGerenciadorAlunos.setEnabledAt(1, false);
-        jComboBoxModalidadeAlunoDados.setEnabled(false);
         
         jButtonDetalhesAluno.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-        
-        for (Esporte modalidade : Esporte.values()) {
-            jComboBoxModalidadeAlunoDados.addItem(modalidade.getEsporte());
-        }
+     
+        listar();
     }
 
+    //</editor-fold>
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -232,7 +347,6 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jTextFieldNomeAlunoDados = new javax.swing.JTextField();
         jLabelNomeAlunoDados = new javax.swing.JLabel();
         jTextFieldEnderecoAlunoDados = new javax.swing.JTextField();
-        jComboBoxModalidadeAlunoDados = new javax.swing.JComboBox<>();
         jTextFieldRGAlunoDados = new javax.swing.JTextField();
         jLabelRGAlunoDados = new javax.swing.JLabel();
         jLabelMatriculaDados = new javax.swing.JLabel();
@@ -248,10 +362,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         jFormattedTextFieldTelefoneAlunoDados = new javax.swing.JFormattedTextField();
         jButtonSalvarAlunoDados = new javax.swing.JButton();
         jButtonVoltarAlunoDados = new javax.swing.JButton();
-        jLabelModalidadeAlunoDados = new javax.swing.JLabel();
         jLabelNroMatriculaAlunoDados = new javax.swing.JLabel();
-        jScrollPaneModalidades = new javax.swing.JScrollPane();
-        jListModalidades = new javax.swing.JList<>();
         jLabelLembreteIdade = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -335,11 +446,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                         .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
                         .addComponent(jButtonVoltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(136, 136, 136)
                         .addComponent(jButtonDetalhesAluno)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonExcluir))
                     .addGroup(jPanelGerenciamentoLayout.createSequentialGroup()
                         .addGroup(jPanelGerenciamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,26 +471,25 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                     .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelGerenciamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonEditar)
-                    .addComponent(jButtonExcluir)
                     .addComponent(jButtonVoltar)
-                    .addComponent(jButtonDetalhesAluno))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonDetalhesAluno)
+                    .addComponent(jButtonEditar)
+                    .addComponent(jButtonExcluir))
+                .addContainerGap())
         );
 
         jTabbedPaneGerenciadorAlunos.addTab("Gerenciamento", jPanelGerenciamento);
 
+        jTextFieldNomeAlunoDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
         jLabelNomeAlunoDados.setText("Nome Completo:*");
 
-        jComboBoxModalidadeAlunoDados.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBoxModalidadeAlunoDadosItemStateChanged(evt);
-            }
-        });
+        jTextFieldEnderecoAlunoDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
+        jTextFieldRGAlunoDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextFieldRGAlunoDados.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldRGAlunoDadosKeyTyped(evt);
@@ -390,6 +500,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
         jLabelMatriculaDados.setText("Matricula:");
 
+        jTextFieldIdadeAlunoDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextFieldIdadeAlunoDados.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldIdadeAlunoDadosFocusLost(evt);
@@ -409,8 +520,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
         jLabelNomeRespAlunoMenorDados.setText("Nome Responsavel:*");
 
+        jTextFieldNomeRespAlunoMenorDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
         jLabelRGRespAlunoMenorDados.setText("RG do Responsavel:*");
 
+        jTextFieldRGRespAlunoMenorDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextFieldRGRespAlunoMenorDados.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldRGRespAlunoMenorDadosKeyTyped(evt);
@@ -446,10 +560,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         );
 
         try {
-            jFormattedTextFieldTelefoneAlunoDados.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
+            jFormattedTextFieldTelefoneAlunoDados.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jFormattedTextFieldTelefoneAlunoDados.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
         jButtonSalvarAlunoDados.setText("Salvar");
         jButtonSalvarAlunoDados.addActionListener(new java.awt.event.ActionListener() {
@@ -465,10 +580,6 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
             }
         });
 
-        jLabelModalidadeAlunoDados.setText("Modalidade do aluno:");
-
-        jScrollPaneModalidades.setViewportView(jListModalidades);
-
         javax.swing.GroupLayout jPanelAlunoDadosLayout = new javax.swing.GroupLayout(jPanelAlunoDados);
         jPanelAlunoDados.setLayout(jPanelAlunoDadosLayout);
         jPanelAlunoDadosLayout.setHorizontalGroup(
@@ -478,14 +589,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                     .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanelAlunoDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
-                                .addComponent(jButtonVoltarAlunoDados)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonSalvarAlunoDados))
                             .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAlunoDadosLayout.createSequentialGroup()
                                 .addComponent(jLabelIdadeAlunoDados)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                                 .addComponent(jTextFieldIdadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(3, 3, 3)
                                 .addComponent(jLabelRGAlunoDados)
@@ -502,19 +609,18 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextFieldEnderecoAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
-                                        .addComponent(jLabelModalidadeAlunoDados)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBoxModalidadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
                                         .addComponent(jLabelMatriculaDados)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabelNroMatriculaAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabelNomeAlunoDados)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldNomeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPaneModalidades, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addComponent(jTextFieldNomeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
+                                .addComponent(jButtonVoltarAlunoDados)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonSalvarAlunoDados))))
                     .addGroup(jPanelAlunoDadosLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jLabelLembreteIdade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -544,22 +650,13 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                 .addGroup(jPanelAlunoDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEnderecoAlunoDados)
                     .addComponent(jTextFieldEnderecoAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanelAlunoDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxModalidadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelModalidadeAlunoDados))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneModalidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelAlunoDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAlunoDadosLayout.createSequentialGroup()
-                        .addComponent(jButtonVoltarAlunoDados)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAlunoDadosLayout.createSequentialGroup()
-                        .addComponent(jButtonSalvarAlunoDados)
-                        .addGap(18, 18, 18))))
+                    .addComponent(jButtonSalvarAlunoDados)
+                    .addComponent(jButtonVoltarAlunoDados))
+                .addGap(170, 170, 170))
         );
 
         jTabbedPaneGerenciadorAlunos.addTab("Dados", jPanelAlunoDados);
@@ -573,13 +670,14 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPaneGerenciadorAlunos)
-                .addContainerGap())
+                .addGap(0, 0, 0)
+                .addComponent(jTabbedPaneGerenciadorAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    //<editor-fold defaultstate="collapsed" desc="soNumeros(EventoCampo)">
 
     private void jTextFieldIdadeAlunoDadosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIdadeAlunoDadosKeyTyped
         // TODO add your handling code here:
@@ -591,6 +689,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         soNumeros(evt);
     }//GEN-LAST:event_jTextFieldRGAlunoDadosKeyTyped
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Campo texto Busca (keyReleased)">
+    
     private void jTextFieldBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyReleased
         // TODO add your handling code here:
         char c = evt.getKeyChar();
@@ -607,6 +709,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextFieldBuscaKeyReleased
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="ComboBox(EsvaziarCampo)/ Voltar(Button)/CampoBusca(KeyTyped))">
+    
     private void jComboBoxTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoBuscaItemStateChanged
         // TODO add your handling code here:
         jTextFieldBusca.setText("");
@@ -614,7 +720,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
 
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         // TODO add your handling code here:
-        new Inicial().setVisible(true);
+        new Inicial(this.listaAlunos, this.listaTurmas).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
@@ -625,6 +731,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextFieldBuscaKeyTyped
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Adicionar(Button)/ VoltarAluno(Button)">
+    
     private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
         // TODO add your handling code here:
         isEdit = false;
@@ -640,130 +750,87 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         mudarAbas(1, 0);
     }//GEN-LAST:event_jButtonVoltarAlunoDadosActionPerformed
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="CampoIdade(FocusLost)">
+    
     private void jTextFieldIdadeAlunoDadosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIdadeAlunoDadosFocusLost
         // TODO add your handling code here:
+        // Deixar campos dos alunos menor de idade visíveis ou invisíveis
         if(!jTextFieldIdadeAlunoDados.getText().trim().equals("") && Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) < 18){
             jTextFieldNomeRespAlunoMenorDados.setVisible(true);
             jLabelNomeRespAlunoMenorDados.setVisible(true);
             jLabelRGRespAlunoMenorDados.setVisible(true);
             jTextFieldRGRespAlunoMenorDados.setVisible(true);
+
         } else if(!jTextFieldIdadeAlunoDados.getText().trim().equals("") && Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 17){
             jTextFieldNomeRespAlunoMenorDados.setVisible(false);
             jLabelNomeRespAlunoMenorDados.setVisible(false);
             jLabelRGRespAlunoMenorDados.setVisible(false);
             jTextFieldRGRespAlunoMenorDados.setVisible(false);
         }
-        
+        // Lembrete
         if(jTextFieldIdadeAlunoDados.getText().trim().equals("")){
             jLabelLembreteIdade.setText("Campo idade obrigatório e necessário para buscar turmas");
-            jComboBoxModalidadeAlunoDados.setEnabled(false);
         } else if(!jTextFieldIdadeAlunoDados.getText().trim().equals("")){
             jLabelLembreteIdade.setText("");
-            jComboBoxModalidadeAlunoDados.setEnabled(true);
         }
     }//GEN-LAST:event_jTextFieldIdadeAlunoDadosFocusLost
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Salvar(Button)">
+    
     private void jButtonSalvarAlunoDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarAlunoDadosActionPerformed
         // TODO add your handling code here:
-        Aluno a=null;
-        Turma t=null;
-        Long rg = 0L; 
-        long telefone=0;
+        Aluno a = createAluno();
         
-        if(!jTextFieldRGAlunoDados.getText().trim().equals("")){
-            rg = Long.parseLong(jTextFieldRGAlunoDados.getText().trim());
-        }
-        
-        if(!jFormattedTextFieldTelefoneAlunoDados.getText().trim().equals("")){
-            String aux="", telefoneString=jFormattedTextFieldTelefoneAlunoDados.getText().trim();
-            for (int i = 0; i < telefoneString.length(); i++) {
-                if(Character.isDigit(telefoneString.charAt(i))){
-                    aux += telefoneString.charAt(i);
-                }
-            }
-            telefone = Long.parseLong(aux);
-        }
-        //Verificando se o campo idade foi preenchido para que assim possa saber se o aluno
-        //é menor de idade ou não
-        if(!jTextFieldIdadeAlunoDados.getText().trim().equals("")){
-            //Verificando a idade do aluno caso seja maior de idade cria um objeto aluno
-            if(Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 18){
-                if(!jTextFieldNomeAlunoDados.getText().trim().equals("")){
-
-                    a = new Aluno(jTextFieldNomeAlunoDados.getText(), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
-                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
-                    a.setTelefoneContato(telefone);
-                    a.setRg(rg);
+        if(isEdit && a != null){
+            if(verificacao("Deseja realmente editar o aluno? Obs.: Esta ação modificará sua matricula")){
+                if(listaAlunos.editar(getCod(), a)){
+                    limparCampos();
+                    JOptionPane.showMessageDialog(null, "Aluno editado com sucesso");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                    JOptionPane.showMessageDialog(null, "ERRO 02 - OCORREU UM ERRO DURANTE A EDIÇÃO");
                 }
-            //Caso o aluno seja menor de idade     
+
+                listar();
+                mudarAbas(1, 0);
+            }
+
+
+        } else if(a != null){
+
+            if(listaAlunos.incluir(a)){
+                limparCampos();
+                JOptionPane.showMessageDialog(null, "Aluno cadastrado com sucesso");
             } else {
-                //Verificando se os alunos menores de idade possuem os dados mínimos
-                if(jTextFieldNomeAlunoDados.getText().trim().equals("") || jTextFieldNomeRespAlunoMenorDados.getText().trim().equals("")
-                        || jTextFieldRGRespAlunoMenorDados.getText().trim().equals("")){
-                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
-                } else {
-                    a = new AlunoMenorDeIdade(jTextFieldNomeAlunoDados.getText(), jTextFieldNomeRespAlunoMenorDados.getText()
-                            , Long.parseLong(jTextFieldRGRespAlunoMenorDados.getText()), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
-                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
-                    a.setTelefoneContato(telefone);
-                    a.setRg(rg);
-                }
+                JOptionPane.showMessageDialog(null, "ERRO 01 - OCORREU UM ERRO DURANTE O CADASTRO");
             }
-            
-            if(isEdit && a != null){
-                
-                if(verificacao("Deseja realmente editar o aluno? Obs.: Esta ação modificará sua matricula")){
-                    if(listaAlunos.editar(getCod(), a)){
-                        limparCampos();
-                        JOptionPane.showMessageDialog(null, "Aluno editado com sucesso");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "ERRO 02 - OCORREU UM ERRO DURANTE A EDIÇÃO");
-                    }
 
+            if(verificacao("Deseja cadastrar um novo aluno?")){
+                    jLabelNroMatriculaAlunoDados.setText(String.valueOf(Aluno.getSequence()));
+            } else {
                     listar();
                     mudarAbas(1, 0);
-                }
-                
-                
-            } else if(a != null){
-                
-                if(listaAlunos.incluir(a)){
-                    limparCampos();
-                    JOptionPane.showMessageDialog(null, "Aluno cadastrado com sucesso");
-                } else {
-                    JOptionPane.showMessageDialog(null, "ERRO 01 - OCORREU UM ERRO DURANTE O CADASTRO");
-                }
-                    
-                if(verificacao("Deseja cadastrar um novo aluno?")){
-                        jLabelNroMatriculaAlunoDados.setText(String.valueOf(Aluno.getSequence()));
-                } else {
-                        listar();
-                        mudarAbas(1, 0);
-                }
             }
-            
-            if(a != null && !jListModalidades.isSelectionEmpty()){
-                t = listaTurmas.buscarTurma(getCod());
-                
-                if(t.addAluno(a)){
-                    JOptionPane.showMessageDialog(null, "Aluno cadastrado na turma "+t.getTurma()+" com sucesso!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "ERRO 03 - OCORREU UM ERRO DURANTE O CADASTRO DO ALUNO NA TURMA OU O MESMO JÁ ESTÁ CADASTRADO NA TURMA");
-                }
-            }            
-        } else {
-            JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
         }
     }//GEN-LAST:event_jButtonSalvarAlunoDadosActionPerformed
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Excluir(Button)">
+    
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         // TODO add your handling code here:
         listaAlunos.excluir(getCod());
         listar();
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Editar(Button)">
+    
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
         isEdit = true;
@@ -772,6 +839,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         mudarAbas(0, 1);
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Detalhes(Button)">
+    
     private void jButtonDetalhesAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetalhesAlunoActionPerformed
         // TODO add your handling code here:
         desativarCampos(getCod());
@@ -779,6 +850,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         mudarAbas(0, 1);
     }//GEN-LAST:event_jButtonDetalhesAlunoActionPerformed
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="JListAlunos(ValueChanged=Enabled(Button))">
+    
     private void jListAlunosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListAlunosValueChanged
         // TODO add your handling code here:
         if(!jListAlunos.isSelectionEmpty()){
@@ -792,36 +867,19 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jListAlunosValueChanged
 
-    private void jComboBoxModalidadeAlunoDadosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxModalidadeAlunoDadosItemStateChanged
-        // TODO add your handling code here:
-        DefaultListModel listModel2 = new DefaultListModel();
-        List<Turma> listaTurmas = null;
-        switch(jComboBoxModalidadeAlunoDados.getSelectedItem().toString()){
-            case "Futebol":
-                listaTurmas = this.listaTurmas.buscarEsporte(Esporte.verificarEsporte("Futebol"));
-                break;
-            case "Basquete":
-                listaTurmas = this.listaTurmas.buscarEsporte(Esporte.verificarEsporte("Basquete"));
-                break;
-            case "Voleibol":
-                listaTurmas = this.listaTurmas.buscarEsporte(Esporte.verificarEsporte("Voleibol"));
-                break;
-        }
-        
-        if(listaTurmas != null){
-            for (Turma turma : listaTurmas) {
-                if(turma.getQuantidadeAlunos() < turma.getMAX_ALUNO()){
-                    listModel2.addElement(turma.toString());
-                }
-            }
-        }    
-    }//GEN-LAST:event_jComboBoxModalidadeAlunoDadosItemStateChanged
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="soNumeros(EventoCampo)">
+    
     private void jTextFieldRGRespAlunoMenorDadosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldRGRespAlunoMenorDadosKeyTyped
         // TODO add your handling code here:
         soNumeros(evt);
     }//GEN-LAST:event_jTextFieldRGRespAlunoMenorDadosKeyTyped
 
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Main + Variáveis">
+    
     /**
      * @param args the command line arguments
      */
@@ -865,7 +923,6 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private javax.swing.JButton jButtonSalvarAlunoDados;
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JButton jButtonVoltarAlunoDados;
-    private javax.swing.JComboBox<String> jComboBoxModalidadeAlunoDados;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
     private javax.swing.JFormattedTextField jFormattedTextFieldTelefoneAlunoDados;
     private javax.swing.JLabel jLabelAluno;
@@ -874,7 +931,6 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelIdadeAlunoDados;
     private javax.swing.JLabel jLabelLembreteIdade;
     private javax.swing.JLabel jLabelMatriculaDados;
-    private javax.swing.JLabel jLabelModalidadeAlunoDados;
     private javax.swing.JLabel jLabelNomeAlunoDados;
     private javax.swing.JLabel jLabelNomeRespAlunoMenorDados;
     private javax.swing.JLabel jLabelNroMatriculaAlunoDados;
@@ -882,12 +938,10 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelRGRespAlunoMenorDados;
     private javax.swing.JLabel jLabelTelefoneAlunoDados;
     private javax.swing.JList<String> jListAlunos;
-    private javax.swing.JList<String> jListModalidades;
     private javax.swing.JPanel jPanelAlunoDados;
     private javax.swing.JPanel jPanelAlunoMenorDeIdade;
     private javax.swing.JPanel jPanelGerenciamento;
     private javax.swing.JScrollPane jScrollPaneAlunos;
-    private javax.swing.JScrollPane jScrollPaneModalidades;
     private javax.swing.JTabbedPane jTabbedPaneGerenciadorAlunos;
     private javax.swing.JTextField jTextFieldBusca;
     private javax.swing.JTextField jTextFieldEnderecoAlunoDados;
@@ -897,4 +951,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldRGAlunoDados;
     private javax.swing.JTextField jTextFieldRGRespAlunoMenorDados;
     // End of variables declaration//GEN-END:variables
+
+    //</editor-fold>
+    
 }

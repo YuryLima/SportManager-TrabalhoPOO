@@ -6,6 +6,10 @@
 package org.unipampa.sportmanager.aplicacao;
 
 import org.unipampa.sportmanager.frames.Inicial;
+import org.unipampa.sportmanager.listainterface.CrudAluno;
+import org.unipampa.sportmanager.listainterface.CrudTurma;
+import org.unipampa.sportmanager.listainterface.ListaAlunos;
+import org.unipampa.sportmanager.listainterface.ListaTurmas;
 /**
  *
  * @author yuryalencar
@@ -17,7 +21,8 @@ public class Aplicacao {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new Inicial().setVisible(true);
+        
+        new Inicial(new ListaAlunos(), new ListaTurmas()).setVisible(true);
     }
     
 }

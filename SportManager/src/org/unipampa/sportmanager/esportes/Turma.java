@@ -46,7 +46,7 @@ public class Turma {
      * sistema o número não pode ser negativo e nem menor do que 4 
      */
     public Turma(int horario, Esporte modalidade, int MAX_ALUNO, int menorIdade, int maiorIdade) {
-        if(MAX_ALUNO < 0 || menorIdade < 3 || maiorIdade < 4 || maiorIdade<menorIdade || maiorIdade>100){
+        if(MAX_ALUNO < 0 || menorIdade < 3 || maiorIdade < 4 || maiorIdade<menorIdade || maiorIdade>115){
             throw new IllegalArgumentException("Número informado inválido");
         }
         this.turma = sequence++;
@@ -210,7 +210,7 @@ public class Turma {
     //<editor-fold defaultstate="collapsed" desc="toString">
     
     public String toString(){
-        return this.turma+" - "+this.modalidade.getEsporte()+" - MAXIMO DE ALUNOS: "+this.MAX_ALUNO+" - ALUNOS: "+getQuantidadeAlunos();
+        return this.turma+" - "+this.modalidade.getEsporte()+" - Máximo de Alunos da Turma: "+this.MAX_ALUNO+" - Alunos Matriculados: "+getQuantidadeAlunos();
     }
     
     //</editor-fold>

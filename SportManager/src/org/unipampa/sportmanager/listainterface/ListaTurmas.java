@@ -36,8 +36,7 @@ public class ListaTurmas implements CrudTurma {
     //<editor-fold defaultstate="collapsed" desc="Incluir">
     @Override
     public boolean incluir(Turma esporte) {
-        listaEsportes.add(esporte);
-        return true;
+        return listaEsportes.add(esporte);
     }
     //</editor-fold>
 

@@ -5,44 +5,58 @@
  */
 package org.unipampa.sportmanager.frames;
 
-import java.awt.PopupMenu;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import org.unipampa.sportmanager.aluno.Aluno;
 import org.unipampa.sportmanager.esportes.Esporte;
 import org.unipampa.sportmanager.esportes.Turma;
+import org.unipampa.sportmanager.aluno.Aluno;
+import org.unipampa.sportmanager.listainterface.CrudAluno;
 import org.unipampa.sportmanager.listainterface.CrudTurma;
+import org.unipampa.sportmanager.listainterface.ListaAlunos;
 import org.unipampa.sportmanager.listainterface.ListaTurmas;
 
+/*
+Faltando fazer as pesquisas(Turma), verificação dos campos(MaiorMenorTurma),
+algumas verificaçoẽs na aba Alunos(Turma), NovoAluno setando mais do que necessário
+no comboBox
+*/
 /**
  *
  * @author junio
+ * @author Lucas Correa
+ * @author yuryalencar
  */
 public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private ListaTurmas listaTurmas;
-    private Esporte enuEpt;
+    private ListaAlunos listaAlunos;
+    private Turma t;
 
     /**
      * Creates new form Turma
      */
-    public GerenciadorTurmas(CrudTurma listaTurmas) {
+    public GerenciadorTurmas(CrudAluno listaAlunos, CrudTurma listaTurmas) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Gerenciador de turmas");
+
         this.listaTurmas = (ListaTurmas) listaTurmas;
+        this.listaAlunos = (ListaAlunos) listaAlunos;
+        
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
 
-        jTabbedPane1.setEnabledAt(1, false);
-        jTabbedPane1.setEnabledAt(2, false);
-
+        jButtonRemoverAlunoTurma.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-        jButtonVizuAlunos.setEnabled(false);
+        jButtonVizualizarAlunos.setEnabled(false);
 
         for (Esporte modalidade : Esporte.values()) {
-            jComboBoxModalidade.addItem(modalidade.getEsporte());
+            jComboBoxModalidadeTurma.addItem(modalidade.getEsporte());
         }
+        
+        listar();
     }
 
     /**
@@ -52,15 +66,57 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
 
+    /**
+     * Método para fazer alguma verificação, com
+     * um JOPtionPane com sim e não.
+     * @param message - Tipo:String, contendo a mensagem
+     * para a verificação.
+     * @return - true caso a resposta tem sido sim e 
+     * false caso contrário.
+     */
+    private boolean verificacao(String message){
+        int resposta = JOptionPane.showConfirmDialog(null, message, "Verificação",
+                JOptionPane.YES_NO_OPTION);
+        return resposta == JOptionPane.YES_OPTION;
+    }
+    
+    /**
+     * Método para a verificação se no campo só contem numeros
+     * @param evt - evento key
+     */
+    private void soNumeros(java.awt.event.KeyEvent evt){
+        if(!(Character.isDigit(evt.getKeyChar()))){
+            evt.consume();
+        }
+    }
+    
+    /**
+     * Métodos para limpar os campos.
+     */
     private void limparCampos() {
-        jTextFieldMaiorIdade.setText("");
-        jTextFieldMenorIdade.setText("");
-        jTextFieldMaxAlunos.setText("");
-        jFormattedHorario.setText("");
+        jTextFieldMaiorIdadeTurma.setText("");
+        jTextFieldMenorIdadeTurma.setText("");
+        jTextFieldMaximoAlunosTurma.setText("");
+        jFormattedHorarioTurma.setText("");
 
     }
 
-    private void listarMatricula() {
+    private void listar(){
+        DefaultListModel listModel = new DefaultListModel();
+        List<Turma> turmas = listaTurmas.getLista();
+
+        for (Turma turma : turmas) {
+            listModel.addElement(turma.toString());
+        }
+
+        jListTurmas.setModel(listModel);
+    }
+    
+    /**
+     * Método para listar por turma, que é
+     * um código só para cada uma.
+     */
+    private void listarTurma() {
         DefaultListModel listModel = new DefaultListModel();
         Turma tur = listaTurmas.buscarTurma(Integer.parseInt(jTextFieldBusca.getText()));
 
@@ -73,21 +129,59 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jListTurmas.setModel(listModel);
     }
 
-    private void listarAlunos() {
-        DefaultListModel listModell = new DefaultListModel();
-        //Aluno 
-
-    }
-
-    private void listar() {
-        DefaultListModel modelo = new DefaultListModel();
-        List<Turma> listaTurm = this.listaTurmas.getLista();
-
-        for (Turma turma : listaTurm) {
-            modelo.addElement(turma.toString());
+    /**
+     * Método para acontecer a extração do código,
+     * que neste caso é equivalente à turma.
+     * @return - retorna um inteiro com o código(Turma)
+     */
+    private int getCod(){
+        String cod="", extract = jListTurmas.getSelectedValue();
+        
+        for (int i = 0; i < extract.length(); i++) {
+            if(extract.charAt(i) == ' '){
+                break;
+            } else {
+                cod += extract.charAt(i);
+            }
         }
+        
+        return Integer.parseInt(cod);
+    }
+    
 
-        jListTurmas.setModel(modelo);
+    /**
+     * Método para acontecer a extração do código,
+     * que neste caso é equivalente à turma.
+     * @return - retorna um inteiro com o código(Turma)
+     */
+    private int getCod(String extract){
+        String cod="";
+        
+        for (int i = 0; i < extract.length(); i++) {
+            if(extract.charAt(i) == ' '){
+                break;
+            } else {
+                cod += extract.charAt(i);
+            }
+        }
+        
+        return Integer.parseInt(cod);
+    }
+    
+    /**
+     * Método para listar todos os alunos cadastrados em uma turma.
+     */
+    private void listarAlunos() {
+        DefaultListModel listModel = new DefaultListModel();
+        List<Aluno> listAluno = listaTurmas.buscarTurma(getCod()).getAlunos();
+        for (Aluno aluno : listAluno) {
+            listModel.addElement(aluno.toString());
+        }
+        if(listModel.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Nenhum aluno cadastrado nesta turma");
+        } else {
+            jListAlunosTurma.setModel(listModel);
+        }
     }
 
 
@@ -95,41 +189,44 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     private void initComponents() {
 
         jInternalFrame1 = new javax.swing.JInternalFrame();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabelGerenciadorAlunos = new javax.swing.JLabel();
+        jTabbedPaneGerenciadorTurmas = new javax.swing.JTabbedPane();
+        jPanelGerenciamentoTurmas = new javax.swing.JPanel();
+        jLabelGerenciadorTurmas = new javax.swing.JLabel();
         jButtonAdicionar = new javax.swing.JButton();
-        jLabelAluno = new javax.swing.JLabel();
+        jLabelTurma = new javax.swing.JLabel();
         jTextFieldBusca = new javax.swing.JTextField();
         jComboBoxTipoBusca = new javax.swing.JComboBox<>();
-        jScrollPaneAlunos = new javax.swing.JScrollPane();
+        jScrollPaneTurmas = new javax.swing.JScrollPane();
         jListTurmas = new javax.swing.JList<>();
         jButtonVoltar = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
-        jButtonVizuAlunos = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jFormattedHorario = new javax.swing.JFormattedTextField();
-        jComboBoxModalidade = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldMenorIdade = new javax.swing.JTextField();
-        jTextFieldMaiorIdade = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldMaxAlunos = new javax.swing.JTextField();
+        jButtonVizualizarAlunos = new javax.swing.JButton();
+        jPanelDadosTurma = new javax.swing.JPanel();
+        jLabelHorarioTurma = new javax.swing.JLabel();
+        jFormattedHorarioTurma = new javax.swing.JFormattedTextField();
+        jComboBoxModalidadeTurma = new javax.swing.JComboBox<>();
+        jLabelModalidadeTurma = new javax.swing.JLabel();
+        jLabelMenorIdadeTurma = new javax.swing.JLabel();
+        jLabelMaiorIdadeTurma = new javax.swing.JLabel();
+        jTextFieldMenorIdadeTurma = new javax.swing.JTextField();
+        jTextFieldMaiorIdadeTurma = new javax.swing.JTextField();
+        jLabelMaximoAlunosTurma = new javax.swing.JLabel();
+        jTextFieldMaximoAlunosTurma = new javax.swing.JTextField();
         jButtonVoltarTurma = new javax.swing.JButton();
         jButtonSalvarTurma = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton2 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        jLabelFaixaIdade = new javax.swing.JLabel();
+        jLabelCriteriosTurma = new javax.swing.JLabel();
+        jLabelNroTurma = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanelAlunosTurma = new javax.swing.JPanel();
+        jScrollPaneAlunosTurma = new javax.swing.JScrollPane();
+        jListAlunosTurma = new javax.swing.JList<>();
+        jButtonRemoverAlunoTurma = new javax.swing.JButton();
+        jLabelAlunosTurma = new javax.swing.JLabel();
+        jButtonVoltarAlunosTurma = new javax.swing.JButton();
+        jButtonNovoAlunoTurma = new javax.swing.JButton();
+        jButtonAtualizarListaAlunos = new javax.swing.JButton();
 
         jInternalFrame1.setVisible(true);
 
@@ -146,7 +243,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabelGerenciadorAlunos.setText("Gerenciador de Alunos");
+        jLabelGerenciadorTurmas.setText("Gerenciador de Turmas");
 
         jButtonAdicionar.setText("Adicionar");
         jButtonAdicionar.addActionListener(new java.awt.event.ActionListener() {
@@ -155,18 +252,9 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             }
         });
 
-        jLabelAluno.setText("Turma:");
+        jLabelTurma.setText("Buscar:");
 
-        jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldBuscaKeyTyped(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldBuscaKeyReleased(evt);
-            }
-        });
-
-        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Matricula" }));
+        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turma", "Horário" }));
         jComboBoxTipoBusca.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxTipoBuscaItemStateChanged(evt);
@@ -178,7 +266,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                 jListTurmasValueChanged(evt);
             }
         });
-        jScrollPaneAlunos.setViewportView(jListTurmas);
+        jScrollPaneTurmas.setViewportView(jListTurmas);
 
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -201,92 +289,99 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             }
         });
 
-        jButtonVizuAlunos.setText("Visualizar Alunos");
-        jButtonVizuAlunos.addActionListener(new java.awt.event.ActionListener() {
+        jButtonVizualizarAlunos.setText("Visualizar Alunos");
+        jButtonVizualizarAlunos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVizuAlunosActionPerformed(evt);
+                jButtonVizualizarAlunosActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelGerenciamentoTurmasLayout = new javax.swing.GroupLayout(jPanelGerenciamentoTurmas);
+        jPanelGerenciamentoTurmas.setLayout(jPanelGerenciamentoTurmasLayout);
+        jPanelGerenciamentoTurmasLayout.setHorizontalGroup(
+            jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                         .addComponent(jButtonAdicionar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelAluno)
+                        .addComponent(jLabelTurma)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
-                        .addComponent(jComboBoxTipoBusca, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabelGerenciadorAlunos)
+                        .addComponent(jComboBoxTipoBusca, 0, 266, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneTurmas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
+                        .addComponent(jLabelGerenciadorTurmas)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                         .addComponent(jButtonVoltar)
-                        .addGap(42, 42, 42)
-                        .addComponent(jButtonVizuAlunos)
-                        .addGap(59, 59, 59)
-                        .addComponent(jButtonEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonVizualizarAlunos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonExcluir)))
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanelGerenciamentoTurmasLayout.setVerticalGroup(
+            jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabelGerenciadorAlunos)
+                .addComponent(jLabelGerenciadorTurmas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdicionar)
-                    .addComponent(jLabelAluno)
+                    .addComponent(jLabelTurma)
                     .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPaneTurmas, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonVoltar)
                     .addComponent(jButtonEditar)
                     .addComponent(jButtonExcluir)
-                    .addComponent(jButtonVizuAlunos))
+                    .addComponent(jButtonVizualizarAlunos))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 278, Short.MAX_VALUE)
-        );
+        jTabbedPaneGerenciadorTurmas.addTab("Gerenciamento", jPanelGerenciamentoTurmas);
 
-        jTabbedPane1.addTab("Gerenciamento", jPanel1);
-
-        jLabel1.setText("Horario:");
+        jLabelHorarioTurma.setText("Horario:*");
 
         try {
-            jFormattedHorario.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+            jFormattedHorarioTurma.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
-        jLabel2.setText("Modalidade:");
+        jLabelModalidadeTurma.setText("Modalidade:");
 
-        jLabel3.setText("Menor Idade:");
+        jLabelMenorIdadeTurma.setText("Menor Idade:*");
 
-        jLabel4.setText("Maior Idade:");
+        jLabelMaiorIdadeTurma.setText("Maior Idade:*");
 
-        jLabel5.setText("Maximo de Alunos:");
+        jTextFieldMenorIdadeTurma.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMenorIdadeTurmaKeyTyped(evt);
+            }
+        });
+
+        jTextFieldMaiorIdadeTurma.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaiorIdadeTurmaKeyTyped(evt);
+            }
+        });
+
+        jLabelMaximoAlunosTurma.setText("Maximo de Alunos:*");
+
+        jTextFieldMaximoAlunosTurma.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaximoAlunosTurmaKeyTyped(evt);
+            }
+        });
 
         jButtonVoltarTurma.setText("Voltar");
         jButtonVoltarTurma.addActionListener(new java.awt.event.ActionListener() {
@@ -302,266 +397,342 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextFieldMaiorIdade)
-                            .addComponent(jTextFieldMenorIdade)
-                            .addComponent(jFormattedHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxModalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldMaxAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(66, 66, 66))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonVoltarTurma)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSalvarTurma)
-                        .addContainerGap())))
+        jLabelFaixaIdade.setText("Faixa de idade da Turma:");
+
+        jLabelCriteriosTurma.setText("Critérios da Turma:");
+
+        jLabelNroTurma.setText("Turma:");
+
+        jLabel1.setText("NroTurma");
+
+        javax.swing.GroupLayout jPanelDadosTurmaLayout = new javax.swing.GroupLayout(jPanelDadosTurma);
+        jPanelDadosTurma.setLayout(jPanelDadosTurmaLayout);
+        jPanelDadosTurmaLayout.setHorizontalGroup(
+            jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                .addComponent(jButtonVoltarTurma)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonSalvarTurma))
+                            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                        .addComponent(jLabelMaiorIdadeTurma)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldMaiorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                        .addComponent(jLabelHorarioTurma)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jFormattedHorarioTurma)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelMaximoAlunosTurma)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTextFieldMaximoAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addComponent(jLabelFaixaIdade)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabelNroTurma)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDadosTurmaLayout.createSequentialGroup()
+                                        .addComponent(jLabelMenorIdadeTurma)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextFieldMenorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jComboBoxModalidadeTurma, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                .addGap(86, 86, 86)
+                                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelModalidadeTurma)
+                                    .addComponent(jLabelCriteriosTurma))))))
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jPanelDadosTurmaLayout.setVerticalGroup(
+            jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jFormattedHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxModalidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextFieldMenorIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextFieldMaxAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxModalidadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelModalidadeTurma)
+                    .addComponent(jLabelNroTurma)
+                    .addComponent(jLabel1))
+                .addGap(25, 25, 25)
+                .addComponent(jLabelCriteriosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldMaiorIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelMaximoAlunosTurma)
+                    .addComponent(jLabelHorarioTurma)
+                    .addComponent(jFormattedHorarioTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldMaximoAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(jLabelFaixaIdade)
+                .addGap(18, 18, 18)
+                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelMenorIdadeTurma)
+                    .addComponent(jTextFieldMenorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelMaiorIdadeTurma)
+                    .addComponent(jTextFieldMaiorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonVoltarTurma)
                     .addComponent(jButtonSalvarTurma))
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        jTabbedPaneGerenciadorTurmas.addTab("Dados", jPanelDadosTurma);
 
-        jTabbedPane1.addTab("Dados", jPanel2);
+        jListAlunosTurma.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListAlunosTurmaValueChanged(evt);
+            }
+        });
+        jScrollPaneAlunosTurma.setViewportView(jListAlunosTurma);
 
-        jScrollPane1.setViewportView(jList1);
+        jButtonRemoverAlunoTurma.setText("Remover aluno");
+        jButtonRemoverAlunoTurma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoverAlunoTurmaActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Retirar da Turma");
+        jLabelAlunosTurma.setText("Todos os alunos da turma selecionada:");
 
-        jLabel6.setText("Alunos");
+        jButtonVoltarAlunosTurma.setText("Voltar");
+        jButtonVoltarAlunosTurma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVoltarAlunosTurmaActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Voltar");
+        jButtonNovoAlunoTurma.setText("Novo Aluno");
+        jButtonNovoAlunoTurma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNovoAlunoTurmaActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(219, 219, 219)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+        jButtonAtualizarListaAlunos.setText("Atualizar");
+        jButtonAtualizarListaAlunos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAtualizarListaAlunosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelAlunosTurmaLayout = new javax.swing.GroupLayout(jPanelAlunosTurma);
+        jPanelAlunosTurma.setLayout(jPanelAlunosTurmaLayout);
+        jPanelAlunosTurmaLayout.setHorizontalGroup(
+            jPanelAlunosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAlunosTurmaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6)
+                .addGroup(jPanelAlunosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPaneAlunosTurma)
+                    .addGroup(jPanelAlunosTurmaLayout.createSequentialGroup()
+                        .addComponent(jLabelAlunosTurma)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                        .addComponent(jButtonAtualizarListaAlunos))
+                    .addGroup(jPanelAlunosTurmaLayout.createSequentialGroup()
+                        .addComponent(jButtonVoltarAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonNovoAlunoTurma)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonRemoverAlunoTurma)))
+                .addContainerGap())
+        );
+        jPanelAlunosTurmaLayout.setVerticalGroup(
+            jPanelAlunosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAlunosTurmaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelAlunosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAlunosTurma)
+                    .addComponent(jButtonAtualizarListaAlunos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                .addComponent(jScrollPaneAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(jPanelAlunosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRemoverAlunoTurma)
+                    .addComponent(jButtonVoltarAlunosTurma)
+                    .addComponent(jButtonNovoAlunoTurma))
                 .addGap(12, 12, 12))
         );
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Alunos", jPanel5);
+        jTabbedPaneGerenciadorTurmas.addTab("Alunos(Turma)", jPanelAlunosTurma);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPaneGerenciadorTurmas)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPaneGerenciadorTurmas)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
-        // TODO add your handling code here:
-        if (jComboBoxTipoBusca.getSelectedItem().toString().equalsIgnoreCase("Matricula")) {
-
-        }
-    }//GEN-LAST:event_jTextFieldBuscaKeyTyped
-
-    private void jTextFieldBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldBuscaKeyReleased
-
-    private void jComboBoxTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoBuscaItemStateChanged
-        // TODO add your handling code here:
-        jTextFieldBusca.setText("");
-    }//GEN-LAST:event_jComboBoxTipoBuscaItemStateChanged
-
-    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
-        // TODO add your handling code here:
-        new Inicial().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButtonVoltarActionPerformed
-
-    private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(1);
-        jTabbedPane1.setEnabledAt(0, false);
-        jTabbedPane1.setEnabledAt(2, false);
-    }//GEN-LAST:event_jButtonAdicionarActionPerformed
-
-    private void jButtonVizuAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVizuAlunosActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(2);
-        jTabbedPane1.setEnabledAt(0, false);
-        jTabbedPane1.setEnabledAt(1, false);
-    }//GEN-LAST:event_jButtonVizuAlunosActionPerformed
-
-    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(1);
-        jTabbedPane1.setEnabledAt(0, false);
-        jTabbedPane1.setEnabledAt(1, false);
-        jTabbedPane1.setEnabledAt(2, true);
-    }//GEN-LAST:event_jButtonEditarActionPerformed
-
-    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonExcluirActionPerformed
-
     private void jButtonSalvarTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarTurmaActionPerformed
         // TODO add your handling code here:
-        String horaString = jFormattedHorario.getText();
-        int hora = 0;
-        String newHora = "";
-        if (!jFormattedHorario.getText().equals("  :  ")) {
+        int hora=0;
+        String newHora="";
+        
+        if(!jFormattedHorarioTurma.getText().equals("")){
+            String horaString = jFormattedHorarioTurma.getText();
             for (int i = 0; i < horaString.length(); i++) {
-                if (horaString.charAt(i) != ':') {
+                if(horaString.charAt(i)!=':'){
                     newHora += horaString.charAt(i);
                 }
             }
             hora = Integer.parseInt(newHora);
         }
-        if (jTextFieldMaiorIdade.getText().equals("") || jTextFieldMenorIdade.getText().equals("")
-                || jTextFieldMaxAlunos.getText().equals("") || jFormattedHorario.getText().equals("")) {
+        
+        if (jTextFieldMaiorIdadeTurma.getText().equals("") || jTextFieldMenorIdadeTurma.getText().equals("")
+                || jTextFieldMaximoAlunosTurma.getText().equals("") || jFormattedHorarioTurma.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha os Campos");
-
-        } else if (Integer.parseInt(jTextFieldMenorIdade.getText()) >= Integer.parseInt(jTextFieldMaiorIdade.getText())) {
-            JOptionPane.showMessageDialog(null, "Menor Idade maior ou igual com a Maior Idade");
-        } else if (!jFormattedHorario.getText().equals("")) {
-            int end = 0;
-            String horaS= "", minutos="";
-            for (int i = 0; i < horaString.length(); i++) {
-                if (horaString.charAt(i) == ':') {
-                    end = i;
-                    break;
-                }
-            }
-            horaS = horaString.substring(0, end);
-            minutos = horaString.substring(end+1, horaString.length());
-            if(Integer.parseInt(horaS) > 23 ||Integer.parseInt(minutos) > 59){
-                JOptionPane.showMessageDialog(null, "Hora Inválida");
-                jFormattedHorario.setText("");
-            }            
         } else {
 
             Turma turm = new Turma(hora,
-                    Esporte.verificarEsporte(jComboBoxModalidade.getSelectedItem().toString()),
-                    Integer.parseInt(jTextFieldMaxAlunos.getText()),
-                    Integer.parseInt(jTextFieldMenorIdade.getText()),
-                    Integer.parseInt(jTextFieldMaiorIdade.getText()));
+                    Esporte.verificarEsporte(jComboBoxModalidadeTurma.getSelectedItem().toString()),
+                    Integer.parseInt(jTextFieldMaximoAlunosTurma.getText()),
+                    Integer.parseInt(jTextFieldMenorIdadeTurma.getText()),
+                    Integer.parseInt(jTextFieldMaiorIdadeTurma.getText()));
 
             listaTurmas.incluir(turm);
             limparCampos();
+
+            jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
+            jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
+            
             listar();
-
-            jTabbedPane1.setSelectedIndex(0);
-            jTabbedPane1.setEnabledAt(1, false);
-
-            JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+            
+            JOptionPane.showMessageDialog(null, "Turma cadastrada com sucesso!");
         }
     }//GEN-LAST:event_jButtonSalvarTurmaActionPerformed
 
     private void jButtonVoltarTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarTurmaActionPerformed
         // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(0);
-        jTabbedPane1.setEnabledAt(1, false);
-        jTabbedPane1.setEnabledAt(2, false);
+        jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
     }//GEN-LAST:event_jButtonVoltarTurmaActionPerformed
+
+    private void jButtonVizualizarAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVizualizarAlunosActionPerformed
+        // TODO add your handling code here:
+        jTabbedPaneGerenciadorTurmas.setSelectedIndex(2);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(0, false);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(2, true);
+        this.t = listaTurmas.buscarTurma(getCod());
+        listarAlunos();
+    }//GEN-LAST:event_jButtonVizualizarAlunosActionPerformed
+
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        // TODO add your handling code here:
+        if(verificacao("Deseja realmente excluir esta Turma?")){
+            listaTurmas.excluir(getCod());
+            JOptionPane.showMessageDialog(null, "Turma excluída com sucesso!");
+        }
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        // TODO add your handling code here:
+        jTabbedPaneGerenciadorTurmas.setSelectedIndex(1);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(0, false);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(1, true);
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
+        // TODO add your handling code here:
+        new Inicial(this.listaAlunos, this.listaTurmas).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     private void jListTurmasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListTurmasValueChanged
         // TODO add your handling code here:
         if (!jListTurmas.isSelectionEmpty()) {
             jButtonExcluir.setEnabled(true);
             jButtonEditar.setEnabled(true);
-            jButtonVizuAlunos.setEnabled(true);
+            jButtonVizualizarAlunos.setEnabled(true);
         } else {
             jButtonExcluir.setEnabled(false);
             jButtonEditar.setEnabled(false);
-            jButtonVizuAlunos.setEnabled(false);
+            jButtonVizualizarAlunos.setEnabled(false);
         }
     }//GEN-LAST:event_jListTurmasValueChanged
 
+    private void jComboBoxTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoBuscaItemStateChanged
+        // TODO add your handling code here:
+        jTextFieldBusca.setText("");
+    }//GEN-LAST:event_jComboBoxTipoBuscaItemStateChanged
+
+    private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
+        // TODO add your handling code here:
+        jTabbedPaneGerenciadorTurmas.setSelectedIndex(1);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(0, false);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(1, true);
+        jLabel1.setText(String.valueOf(Turma.getSequence()));
+    }//GEN-LAST:event_jButtonAdicionarActionPerformed
+
+    private void jButtonVoltarAlunosTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarAlunosTurmaActionPerformed
+        // TODO add your handling code here:
+        jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
+        jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
+    }//GEN-LAST:event_jButtonVoltarAlunosTurmaActionPerformed
+
+    private void jListAlunosTurmaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListAlunosTurmaValueChanged
+        // TODO add your handling code here:
+        if(jListAlunosTurma.isSelectionEmpty()){
+           jButtonRemoverAlunoTurma.setEnabled(false);
+        } else {
+           jButtonRemoverAlunoTurma.setEnabled(true);
+        }
+    }//GEN-LAST:event_jListAlunosTurmaValueChanged
+
+    private void jButtonNovoAlunoTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoAlunoTurmaActionPerformed
+        // TODO add your handling code here:
+        new NovoAluno(this.listaAlunos, this.t).setVisible(true);
+    }//GEN-LAST:event_jButtonNovoAlunoTurmaActionPerformed
+
+    private void jTextFieldMenorIdadeTurmaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMenorIdadeTurmaKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldMenorIdadeTurmaKeyTyped
+
+    private void jTextFieldMaiorIdadeTurmaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaiorIdadeTurmaKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldMaiorIdadeTurmaKeyTyped
+
+    private void jTextFieldMaximoAlunosTurmaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaximoAlunosTurmaKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldMaximoAlunosTurmaKeyTyped
+
+    private void jButtonAtualizarListaAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarListaAlunosActionPerformed
+        // TODO add your handling code here:
+        listarAlunos();
+    }//GEN-LAST:event_jButtonAtualizarListaAlunosActionPerformed
+
+    private void jButtonRemoverAlunoTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverAlunoTurmaActionPerformed
+        // TODO add your handling code here:
+        if(verificacao("Deseja realmente remover este aluno da turma?")){
+           t.removeAluno(getCod(jListAlunosTurma.getSelectedValue()));
+           JOptionPane.showMessageDialog(null, "Removido com sucesso!");
+        }
+    }//GEN-LAST:event_jButtonRemoverAlunoTurmaActionPerformed
+
+    //<editor-fold defaultstate="collapsed" desc="Main + Variáveis">
+    
     /**
      * @param args the command line arguments
      */
@@ -588,52 +759,57 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GerenciadorTurmas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GerenciadorTurmas(null).setVisible(true);
+                new GerenciadorTurmas(null, null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAdicionar;
+    private javax.swing.JButton jButtonAtualizarListaAlunos;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonNovoAlunoTurma;
+    private javax.swing.JButton jButtonRemoverAlunoTurma;
     private javax.swing.JButton jButtonSalvarTurma;
-    private javax.swing.JButton jButtonVizuAlunos;
+    private javax.swing.JButton jButtonVizualizarAlunos;
     private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JButton jButtonVoltarAlunosTurma;
     private javax.swing.JButton jButtonVoltarTurma;
-    private javax.swing.JComboBox<String> jComboBoxModalidade;
+    private javax.swing.JComboBox<String> jComboBoxModalidadeTurma;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
-    private javax.swing.JFormattedTextField jFormattedHorario;
+    private javax.swing.JFormattedTextField jFormattedHorarioTurma;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabelAluno;
-    private javax.swing.JLabel jLabelGerenciadorAlunos;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JLabel jLabelAlunosTurma;
+    private javax.swing.JLabel jLabelCriteriosTurma;
+    private javax.swing.JLabel jLabelFaixaIdade;
+    private javax.swing.JLabel jLabelGerenciadorTurmas;
+    private javax.swing.JLabel jLabelHorarioTurma;
+    private javax.swing.JLabel jLabelMaiorIdadeTurma;
+    private javax.swing.JLabel jLabelMaximoAlunosTurma;
+    private javax.swing.JLabel jLabelMenorIdadeTurma;
+    private javax.swing.JLabel jLabelModalidadeTurma;
+    private javax.swing.JLabel jLabelNroTurma;
+    private javax.swing.JLabel jLabelTurma;
+    private javax.swing.JList<String> jListAlunosTurma;
     private javax.swing.JList<String> jListTurmas;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPaneAlunos;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel jPanelAlunosTurma;
+    private javax.swing.JPanel jPanelDadosTurma;
+    private javax.swing.JPanel jPanelGerenciamentoTurmas;
+    private javax.swing.JScrollPane jScrollPaneAlunosTurma;
+    private javax.swing.JScrollPane jScrollPaneTurmas;
+    private javax.swing.JTabbedPane jTabbedPaneGerenciadorTurmas;
     private javax.swing.JTextField jTextFieldBusca;
-    private javax.swing.JTextField jTextFieldMaiorIdade;
-    private javax.swing.JTextField jTextFieldMaxAlunos;
-    private javax.swing.JTextField jTextFieldMenorIdade;
+    private javax.swing.JTextField jTextFieldMaiorIdadeTurma;
+    private javax.swing.JTextField jTextFieldMaximoAlunosTurma;
+    private javax.swing.JTextField jTextFieldMenorIdadeTurma;
     // End of variables declaration//GEN-END:variables
+
+    //</editor-fold>
+    
 }

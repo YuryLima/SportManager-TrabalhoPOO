@@ -62,6 +62,7 @@ public interface CrudTurma {
     
     /**
      * Método para a busca das turmas de acordo com o seu esporte
+     * @param esporte
      * @return - Uma Lista com todas as turmas de um determinado
      * esporte
      */

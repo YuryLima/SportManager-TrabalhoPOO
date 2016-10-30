@@ -18,14 +18,17 @@ import org.unipampa.sportmanager.listainterface.ListaTurmas;
  */
 public class Inicial extends javax.swing.JFrame {
 
-    CrudAluno listaAlunos = new ListaAlunos();
-    CrudTurma listaTurmas = new ListaTurmas();
+    CrudAluno listaAlunos;
+    CrudTurma listaTurmas;
     
     /**
      * Creates new form Inicial
      */
-    public Inicial() {
+    public Inicial(CrudAluno listaAlunos, CrudTurma listaTurmas) {
         initComponents();
+        
+        this.listaAlunos = listaAlunos;
+        this.listaTurmas = listaTurmas;
         
         this.setLocationRelativeTo(null);
         this.setTitle("Gerenciador de esportes - Trabalho POO");
@@ -131,7 +134,7 @@ public class Inicial extends javax.swing.JFrame {
 
     private void jButtonGerenciadorTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciadorTurmasActionPerformed
         // TODO add your handling code here:
-        new GerenciadorTurmas(this.listaTurmas).setVisible(true);
+        new GerenciadorTurmas(this.listaAlunos, this.listaTurmas).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorTurmasActionPerformed
 
@@ -175,7 +178,7 @@ public class Inicial extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Inicial().setVisible(true);
+                new Inicial(null, null).setVisible(true);
             }
         });
     }
