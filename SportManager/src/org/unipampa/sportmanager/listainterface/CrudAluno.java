@@ -61,5 +61,13 @@ public interface CrudAluno {
      */
     public Aluno buscarMatricula(int matricula);
     
+    /**
+     * Método para gravar a lista de turmas e um arquivo binário.
+     */
+    public void gravar()throws Exception;
     
+    /**
+     * Método para ler a lista gravada em disco.
+     */
+    public void ler()throws Exception;
 }

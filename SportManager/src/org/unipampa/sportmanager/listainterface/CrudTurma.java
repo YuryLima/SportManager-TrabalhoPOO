@@ -94,4 +94,14 @@ public interface CrudTurma {
      * @return  - retorna uma lista com as turmas ordenadas do esporte escolhido
      */
     public List<Turma> ordenarQuantidadeAlunos(Esporte esporte);
+    
+    /**
+     * Método para gravar a lista de turmas e um arquivo binário.
+     */
+    public void gravar()throws Exception;
+    
+    /**
+     * Método para ler a lista gravada em disco.
+     */
+    public void ler()throws Exception;
 }

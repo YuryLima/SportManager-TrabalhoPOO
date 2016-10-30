@@ -8,6 +8,8 @@ package org.unipampa.sportmanager.frames;
 //<editor-fold defaultstate="collapsed" desc="Importações">
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.unipampa.sportmanager.aluno.Aluno;
@@ -448,7 +450,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                         .addComponent(jButtonVoltar)
                         .addGap(136, 136, 136)
                         .addComponent(jButtonDetalhesAluno)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonExcluir))
@@ -592,7 +594,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                             .addComponent(jPanelAlunoMenorDeIdade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAlunoDadosLayout.createSequentialGroup()
                                 .addComponent(jLabelIdadeAlunoDados)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                                 .addComponent(jTextFieldIdadeAlunoDados, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(3, 3, 3)
                                 .addComponent(jLabelRGAlunoDados)
@@ -815,6 +817,13 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
                     mudarAbas(1, 0);
             }
         }
+        
+        try {
+            listaAlunos.gravar();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "ERRO 04 - Não foi possível gravar em arquivo");
+        }
+
     }//GEN-LAST:event_jButtonSalvarAlunoDadosActionPerformed
 
     //</editor-fold>
@@ -824,6 +833,11 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         // TODO add your handling code here:
         listaAlunos.excluir(getCod());
+        try {
+            listaAlunos.gravar();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "ERRO 04 - Não foi possível gravar em arquivo");
+        }
         listar();
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
