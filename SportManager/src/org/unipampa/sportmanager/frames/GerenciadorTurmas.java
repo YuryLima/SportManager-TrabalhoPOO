@@ -214,9 +214,9 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         }
         if (listModel.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nenhum aluno cadastrado nesta turma");
-        } else {
-            jListAlunosTurma.setModel(listModel);
         }
+        jListAlunosTurma.setModel(listModel);
+        
     }
 
 
@@ -762,7 +762,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonVoltarAlunosTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarAlunosTurmaActionPerformed
         // TODO add your handling code here:
-        listarAlunos();
+        listar();
         jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
@@ -779,7 +779,11 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonNovoAlunoTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoAlunoTurmaActionPerformed
         // TODO add your handling code here:
-        new NovoAluno(this.listaAlunos, this.t).setVisible(true);
+        if(t.getMAX_ALUNO() > t.getQuantidadeAlunos()){
+            new NovoAluno(this.listaAlunos, this.t).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Turma cheia impossível adicionar um novo aluno!");
+        }
     }//GEN-LAST:event_jButtonNovoAlunoTurmaActionPerformed
 
     private void jTextFieldMenorIdadeTurmaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMenorIdadeTurmaKeyTyped
