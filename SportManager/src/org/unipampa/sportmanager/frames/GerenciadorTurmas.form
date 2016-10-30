@@ -154,9 +154,10 @@
             <Component class="javax.swing.JComboBox" name="jComboBoxTipoBusca">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
+                  <StringArray count="3">
                     <StringItem index="0" value="Turma"/>
-                    <StringItem index="1" value="Hor&#xe1;rio"/>
+                    <StringItem index="1" value="Listar Esporte"/>
+                    <StringItem index="2" value=" "/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -245,23 +246,33 @@
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="jButtonSalvarTurma" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabelMaiorIdadeTurma" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabelMenorIdadeTurma" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextFieldMaiorIdadeTurma" min="-2" pref="147" max="-2" attributes="0"/>
+                                              <Component id="jTextFieldMenorIdadeTurma" min="-2" pref="140" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabelHorarioTurma" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedHorarioTurma" max="32767" attributes="0"/>
+                                              <Component id="jFormattedHorarioTurma" min="-2" pref="169" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabelMaximoAlunosTurma" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jTextFieldMaximoAlunosTurma" min="-2" pref="147" max="-2" attributes="0"/>
+                                      <EmptySpace pref="98" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="jLabelMaximoAlunosTurma" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jTextFieldMaximoAlunosTurma" min="-2" pref="147" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jLabelMaiorIdadeTurma" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="jTextFieldMaiorIdadeTurma" min="-2" pref="147" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -278,14 +289,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabelMenorIdadeTurma" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="jTextFieldMenorIdadeTurma" min="-2" pref="147" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jComboBoxModalidadeTurma" alignment="1" min="-2" pref="269" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jComboBoxModalidadeTurma" min="-2" pref="269" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
@@ -320,14 +324,14 @@
                           <Component id="jFormattedHorarioTurma" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldMaximoAlunosTurma" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="51" max="32767" attributes="0"/>
+                      <EmptySpace pref="52" max="32767" attributes="0"/>
                       <Component id="jLabelFaixaIdade" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabelMenorIdadeTurma" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldMenorIdadeTurma" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelMaiorIdadeTurma" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldMaiorIdadeTurma" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelMenorIdadeTurma" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
