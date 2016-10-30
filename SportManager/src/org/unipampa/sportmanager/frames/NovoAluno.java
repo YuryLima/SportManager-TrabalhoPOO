@@ -55,20 +55,28 @@ public class NovoAluno extends javax.swing.JFrame {
         List<Aluno> listaTotal = this.listAlunos.getLista();
         List<Aluno> listaTurma = turma.getAlunos();
         
+        boolean exist= false;
         for (Aluno aluno : listaTotal) {
             if(!listaTurma.isEmpty()){
+                exist = false;
                 for (Aluno alunoTurma : listaTurma) {
-                    if(!aluno.toString().equals(alunoTurma.toString()) &&
-                            aluno.getIdade() <= turma.getMaiorIdade() &&
-                            aluno.getIdade() >= turma.getMenorIdade()){
-                        jComboBoxAlunos.addItem(aluno.toString());
+                    if(aluno.toString().equals(alunoTurma.toString())){
+                        exist = true;
+                        break;
                     }
                 }
             } else {
                 if(aluno.getIdade() <= turma.getMaiorIdade() &&
                         aluno.getIdade() >= turma.getMenorIdade()){
                     jComboBoxAlunos.addItem(aluno.toString());
+                    exist = true;
                 }
+            }
+            
+            if(!exist && aluno.getIdade() <= turma.getMaiorIdade() &&
+                aluno.getIdade() >= turma.getMenorIdade()){
+                    
+                jComboBoxAlunos.addItem(aluno.toString());
             }
         }
         
