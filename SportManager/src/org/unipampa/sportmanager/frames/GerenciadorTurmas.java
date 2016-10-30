@@ -17,10 +17,9 @@ import org.unipampa.sportmanager.listainterface.ListaAlunos;
 import org.unipampa.sportmanager.listainterface.ListaTurmas;
 
 /*
-Faltando fazer as pesquisas(Turma), verificação dos campos(MaiorMenorTurma),
-algumas verificaçoẽs na aba Alunos(Turma), NovoAluno setando mais do que necessário
+Faltando fazer as pesquisas(Turma), , NovoAluno setando mais do que necessário
 no comboBox
-*/
+ */
 /**
  *
  * @author junio
@@ -32,6 +31,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     private ListaTurmas listaTurmas;
     private ListaAlunos listaAlunos;
     private Turma t;
+    private boolean isEdit;
 
     /**
      * Creates new form Turma
@@ -43,7 +43,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
         this.listaTurmas = (ListaTurmas) listaTurmas;
         this.listaAlunos = (ListaAlunos) listaAlunos;
-        
+
         jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
 
@@ -55,7 +55,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         for (Esporte modalidade : Esporte.values()) {
             jComboBoxModalidadeTurma.addItem(modalidade.getEsporte());
         }
-        
+
         listar();
     }
 
@@ -67,29 +67,42 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
 
     /**
-     * Método para fazer alguma verificação, com
-     * um JOPtionPane com sim e não.
-     * @param message - Tipo:String, contendo a mensagem
-     * para a verificação.
-     * @return - true caso a resposta tem sido sim e 
-     * false caso contrário.
+     * Método para fazer alguma verificação, com um JOPtionPane com sim e não.
+     *
+     * @param message - Tipo:String, contendo a mensagem para a verificação.
+     * @return - true caso a resposta tem sido sim e false caso contrário.
      */
-    private boolean verificacao(String message){
+    private boolean verificacao(String message) {
         int resposta = JOptionPane.showConfirmDialog(null, message, "Verificação",
                 JOptionPane.YES_NO_OPTION);
         return resposta == JOptionPane.YES_OPTION;
     }
-    
+
     /**
      * Método para a verificação se no campo só contem numeros
+     *
      * @param evt - evento key
      */
-    private void soNumeros(java.awt.event.KeyEvent evt){
-        if(!(Character.isDigit(evt.getKeyChar()))){
+    private void soNumeros(java.awt.event.KeyEvent evt) {
+        if (!(Character.isDigit(evt.getKeyChar()))) {
             evt.consume();
         }
     }
-    
+
+    /**
+     *
+     * @param turm
+     */
+    private void setarCampos(int turm) {
+        Turma turma = listaTurmas.buscarTurma(turm);
+
+        jTextFieldMaiorIdadeTurma.setText(String.valueOf(turma.getMaiorIdade()));
+        jTextFieldMenorIdadeTurma.setText(String.valueOf(turma.getMenorIdade()));
+        jFormattedHorarioTurma.setText(String.valueOf(turma.getHorario()));
+        jComboBoxModalidadeTurma.setSelectedItem(turma.getModalidade());
+        jTextFieldMaximoAlunosTurma.setText(String.valueOf(turma.getMAX_ALUNO()));
+    }
+
     /**
      * Métodos para limpar os campos.
      */
@@ -100,8 +113,13 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jFormattedHorarioTurma.setText("");
 
     }
+    
+    private void convertHora(){
+    
+    
+    }
 
-    private void listar(){
+    private void listar() {
         DefaultListModel listModel = new DefaultListModel();
         List<Turma> turmas = listaTurmas.getLista();
 
@@ -111,10 +129,9 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
         jListTurmas.setModel(listModel);
     }
-    
+
     /**
-     * Método para listar por turma, que é
-     * um código só para cada uma.
+     * Método para listar por turma, que é um código só para cada uma.
      */
     private void listarTurma() {
         DefaultListModel listModel = new DefaultListModel();
@@ -129,45 +146,63 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jListTurmas.setModel(listModel);
     }
 
+    
     /**
-     * Método para acontecer a extração do código,
-     * que neste caso é equivalente à turma.
+     * 
+     */
+    private void listarHorario(){
+    DefaultListModel listModel = new DefaultListModel();
+        List turma = listaTurmas.buscarHorario(Integer.parseInt(jTextFieldBusca.getText()));
+
+        if (turma != null) {
+            listModel.addElement(turma.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Horário inexistente");
+        }
+
+        jListTurmas.setModel(listModel);
+    }
+    
+    /**
+     * Método para acontecer a extração do código, que neste caso é equivalente
+     * à turma.
+     *
      * @return - retorna um inteiro com o código(Turma)
      */
-    private int getCod(){
-        String cod="", extract = jListTurmas.getSelectedValue();
-        
+    private int getCod() {
+        String cod = "", extract = jListTurmas.getSelectedValue();
+
         for (int i = 0; i < extract.length(); i++) {
-            if(extract.charAt(i) == ' '){
+            if (extract.charAt(i) == ' ') {
                 break;
             } else {
                 cod += extract.charAt(i);
             }
         }
-        
+
         return Integer.parseInt(cod);
     }
-    
 
     /**
-     * Método para acontecer a extração do código,
-     * que neste caso é equivalente à turma.
+     * Método para acontecer a extração do código, que neste caso é equivalente
+     * à turma.
+     *
      * @return - retorna um inteiro com o código(Turma)
      */
-    private int getCod(String extract){
-        String cod="";
-        
+    private int getCod(String extract) {
+        String cod = "";
+
         for (int i = 0; i < extract.length(); i++) {
-            if(extract.charAt(i) == ' '){
+            if (extract.charAt(i) == ' ') {
                 break;
             } else {
                 cod += extract.charAt(i);
             }
         }
-        
+
         return Integer.parseInt(cod);
     }
-    
+
     /**
      * Método para listar todos os alunos cadastrados em uma turma.
      */
@@ -177,7 +212,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         for (Aluno aluno : listAluno) {
             listModel.addElement(aluno.toString());
         }
-        if(listModel.isEmpty()){
+        if (listModel.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nenhum aluno cadastrado nesta turma");
         } else {
             jListAlunosTurma.setModel(listModel);
@@ -253,6 +288,15 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         });
 
         jLabelTurma.setText("Buscar:");
+
+        jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyTyped(evt);
+            }
+        });
 
         jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turma", "Horário" }));
         jComboBoxTipoBusca.addItemListener(new java.awt.event.ItemListener() {
@@ -583,39 +627,70 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonSalvarTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarTurmaActionPerformed
         // TODO add your handling code here:
-        int hora=0;
-        String newHora="";
-        
-        if(!jFormattedHorarioTurma.getText().equals("")){
-            String horaString = jFormattedHorarioTurma.getText();
+        String horaString = jFormattedHorarioTurma.getText();
+        int hora = 0;
+        String newHora = "";
+        if (!jFormattedHorarioTurma.getText().equals("  :  ")) {
             for (int i = 0; i < horaString.length(); i++) {
-                if(horaString.charAt(i)!=':'){
+                if (horaString.charAt(i) != ':') {
                     newHora += horaString.charAt(i);
                 }
             }
             hora = Integer.parseInt(newHora);
         }
-        
         if (jTextFieldMaiorIdadeTurma.getText().equals("") || jTextFieldMenorIdadeTurma.getText().equals("")
                 || jTextFieldMaximoAlunosTurma.getText().equals("") || jFormattedHorarioTurma.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha os Campos");
-        } else {
 
-            Turma turm = new Turma(hora,
-                    Esporte.verificarEsporte(jComboBoxModalidadeTurma.getSelectedItem().toString()),
-                    Integer.parseInt(jTextFieldMaximoAlunosTurma.getText()),
-                    Integer.parseInt(jTextFieldMenorIdadeTurma.getText()),
-                    Integer.parseInt(jTextFieldMaiorIdadeTurma.getText()));
+        } else if (Integer.parseInt(jTextFieldMenorIdadeTurma.getText()) >= Integer.parseInt(jTextFieldMaiorIdadeTurma.getText())) {
+            JOptionPane.showMessageDialog(null, "Menor Idade maior ou igual com a Maior Idade");
+        } else if (!jFormattedHorarioTurma.getText().equals("")) {
+            int end = 0;
+            String horaS = "", minutos = "";
+            for (int i = 0; i < horaString.length(); i++) {
+                if (horaString.charAt(i) == ':') {
+                    end = i;
+                    break;
+                }
+            }
+            horaS = horaString.substring(0, end);
+            minutos = horaString.substring(end + 1, horaString.length());
+            if (Integer.parseInt(horaS) > 23 || Integer.parseInt(minutos) > 59) {
+                JOptionPane.showMessageDialog(null, "Hora Inválida");
+                jFormattedHorarioTurma.setText("");
+            } else if (isEdit) {
+                if (verificacao("Deseja Realmente Editar? - Observação, isto irá mudar o número da turma!")) {
+                    Turma turm = new Turma(hora,
+                            Esporte.verificarEsporte(jComboBoxModalidadeTurma.getSelectedItem().toString()),
+                            Integer.parseInt(jTextFieldMaximoAlunosTurma.getText()),
+                            Integer.parseInt(jTextFieldMenorIdadeTurma.getText()),
+                            Integer.parseInt(jTextFieldMaiorIdadeTurma.getText()));
 
-            listaTurmas.incluir(turm);
-            limparCampos();
+                    listaTurmas.editar(getCod(), turm);
 
-            jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
-            jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
-            
-            listar();
-            
-            JOptionPane.showMessageDialog(null, "Turma cadastrada com sucesso!");
+                }
+
+                jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
+                jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
+                jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
+                listar();
+
+            } else {
+                Turma turm = new Turma(hora,
+                        Esporte.verificarEsporte(jComboBoxModalidadeTurma.getSelectedItem().toString()),
+                        Integer.parseInt(jTextFieldMaximoAlunosTurma.getText()),
+                        Integer.parseInt(jTextFieldMenorIdadeTurma.getText()),
+                        Integer.parseInt(jTextFieldMaiorIdadeTurma.getText()));
+
+                listaTurmas.incluir(turm);
+                limparCampos();
+                listar();
+
+                jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
+                jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
+
+                JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+            }
         }
     }//GEN-LAST:event_jButtonSalvarTurmaActionPerformed
 
@@ -637,7 +712,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         // TODO add your handling code here:
-        if(verificacao("Deseja realmente excluir esta Turma?")){
+        if (verificacao("Deseja realmente excluir esta Turma?")) {
             listaTurmas.excluir(getCod());
             JOptionPane.showMessageDialog(null, "Turma excluída com sucesso!");
         }
@@ -645,6 +720,8 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
+        isEdit = true;
+        setarCampos(getCod());
         jTabbedPaneGerenciadorTurmas.setSelectedIndex(1);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(0, false);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(1, true);
@@ -676,6 +753,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
         // TODO add your handling code here:
+        isEdit = false;
         jTabbedPaneGerenciadorTurmas.setSelectedIndex(1);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(0, false);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(1, true);
@@ -684,6 +762,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonVoltarAlunosTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarAlunosTurmaActionPerformed
         // TODO add your handling code here:
+        listarAlunos();
         jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
@@ -691,10 +770,10 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jListAlunosTurmaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListAlunosTurmaValueChanged
         // TODO add your handling code here:
-        if(jListAlunosTurma.isSelectionEmpty()){
-           jButtonRemoverAlunoTurma.setEnabled(false);
+        if (jListAlunosTurma.isSelectionEmpty()) {
+            jButtonRemoverAlunoTurma.setEnabled(false);
         } else {
-           jButtonRemoverAlunoTurma.setEnabled(true);
+            jButtonRemoverAlunoTurma.setEnabled(true);
         }
     }//GEN-LAST:event_jListAlunosTurmaValueChanged
 
@@ -725,14 +804,34 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonRemoverAlunoTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverAlunoTurmaActionPerformed
         // TODO add your handling code here:
-        if(verificacao("Deseja realmente remover este aluno da turma?")){
-           t.removeAluno(getCod(jListAlunosTurma.getSelectedValue()));
-           JOptionPane.showMessageDialog(null, "Removido com sucesso!");
+        if (verificacao("Deseja realmente remover este aluno da turma?")) {
+            t.removeAluno(getCod(jListAlunosTurma.getSelectedValue()));
+            JOptionPane.showMessageDialog(null, "Removido com sucesso!");
         }
     }//GEN-LAST:event_jButtonRemoverAlunoTurmaActionPerformed
 
+    private void jTextFieldBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyReleased
+        // TODO add your handling code here:
+        char digito = evt.getKeyChar();
+        if(jTextFieldBusca.getText().trim().equals("")){
+            listar();
+        } else {
+            if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Turma") && digito != '\n' 
+                    && (Character.isLetter(digito) || Character.isDigit(digito))){
+                listarTurma();
+            } else if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Horário") && digito != '\n'
+                    && Character.isDigit(digito)){
+                listarHorario();
+            }
+        }
+    }//GEN-LAST:event_jTextFieldBuscaKeyReleased
+
+    private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
+        // TODO add your handling code here:
+        soNumeros(evt);
+    }//GEN-LAST:event_jTextFieldBuscaKeyTyped
+
     //<editor-fold defaultstate="collapsed" desc="Main + Variáveis">
-    
     /**
      * @param args the command line arguments
      */
@@ -811,5 +910,4 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     //</editor-fold>
-    
 }
