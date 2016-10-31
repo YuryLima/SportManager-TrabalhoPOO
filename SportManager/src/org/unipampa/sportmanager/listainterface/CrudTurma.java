@@ -69,33 +69,6 @@ public interface CrudTurma {
     public List<Turma> buscarEsporte(Esporte esporte); 
     
     /**
-     * Método para buscar todas as turmas de um certo horário.
-     * @param horario - horário a ser buscado dentro do sistema.
-     * @return - retorna uma lista com todas as turmas que são
-     * do mesmo horário buscado.
-     */
-    public List<Turma> buscarHorario(int horario);
-    
-    /**
-     * Método para ordenar a lista por turma, ou seja o número que
-     * referencia as turmas
-     */
-    public List<Turma> ordenarTurma();
-    
-    /**
-     * Método para ordenar a partir da quantidade de alunos nos esportes.
-     */
-    public void ordenarQuantidadeAlunos();
-    
-    /**
-     * Método para ordenar a partir da quantidade mas neste caso de um esporte
-     * em específico.
-     * @param esporte - Esporte no qual deseja ser organizado 
-     * @return  - retorna uma lista com as turmas ordenadas do esporte escolhido
-     */
-    public List<Turma> ordenarQuantidadeAlunos(Esporte esporte);
-    
-    /**
      * Método para gravar a lista de turmas e um arquivo binário.
      */
     public void gravar()throws Exception;

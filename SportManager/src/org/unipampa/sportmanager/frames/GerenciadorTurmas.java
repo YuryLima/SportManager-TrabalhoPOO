@@ -51,11 +51,13 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
         jButtonVizualizarAlunos.setEnabled(false);
+        jComboBoxBuscaEsporte.setEnabled(false);
 
         for (Esporte modalidade : Esporte.values()) {
             jComboBoxModalidadeTurma.addItem(modalidade.getEsporte());
+            jComboBoxBuscaEsporte.addItem(modalidade.getEsporte());
         }
-
+        
         listar();
     }
 
@@ -116,7 +118,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private int convertHora(String horaString) {
         int end = 0;
-        int minutosGeral=0;
+        int minutosGeral = 0;
         String horaS = "", minutos = "";
         for (int i = 0; i < horaString.length(); i++) {
             if (horaString.charAt(i) == ':') {
@@ -125,32 +127,31 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             }
             horaS = horaString.substring(0, end);
             minutos = horaString.substring(end + 1, horaString.length());
-            
-            minutosGeral = Integer.parseInt(horaS)*60+
-                    Integer.parseInt(minutos);
-            
+
+            minutosGeral = Integer.parseInt(horaS) * 60
+                    + Integer.parseInt(minutos);
 
         }
         return minutosGeral;
     }
 
-    private String discovertHora(int minutos){
+    private String discovertHora(int minutos) {
         int hora, minuto;
         String horas;
-        minuto= minutos%60;
-        hora = minutos/60;
-        if(minuto < 10){
-            horas = String.valueOf(hora) +"0"+String.valueOf(minuto);
-        }else if(hora < 10){    
-            horas= "0"+String.valueOf(hora)+String.valueOf(minuto);
-        }else if (hora<10 && minuto<10){
-            horas="0"+String.valueOf(hora)+"0"+String.valueOf(minuto);
-        }else{
-        horas = String.valueOf(hora)+String.valueOf(minuto);
+        minuto = minutos % 60;
+        hora = minutos / 60;
+        if (minuto < 10) {
+            horas = String.valueOf(hora) + "0" + String.valueOf(minuto);
+        } else if (hora < 10) {
+            horas = "0" + String.valueOf(hora) + String.valueOf(minuto);
+        } else if (hora < 10 && minuto < 10) {
+            horas = "0" + String.valueOf(hora) + "0" + String.valueOf(minuto);
+        } else {
+            horas = String.valueOf(hora) + String.valueOf(minuto);
         }
         return horas;
     }
-    
+
     private void listar() {
         DefaultListModel listModel = new DefaultListModel();
         List<Turma> turmas = listaTurmas.getLista();
@@ -177,38 +178,23 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
         jListTurmas.setModel(listModel);
     }
-    
-    private void listarEsporte(){
-        DefaultListModel listMode = new DefaultListModel();
-        List <Turma> turr = listaTurmas.buscarEsporte(Esporte.verificarEsporte(jTextFieldBusca.getText()));
-        
+
+    private void listarEsporte() {
+        DefaultListModel listModel = new DefaultListModel();
+        List<Turma> turr = listaTurmas.buscarEsporte(Esporte.verificarEsporte(jComboBoxBuscaEsporte.getSelectedItem().toString()));
+
         if (turr != null) {
-            listMode.addElement(turr.toString());
+            for (Turma turma : turr) {
+                listModel.addElement(turma.toString());
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Esporte Inexistente");
         }
 
-        jListTurmas.setModel(listMode);
-        
-    
-    }
-
-    /**
-     *
-     */
-    private void listarHorario() {
-        DefaultListModel listModel = new DefaultListModel();
-        List turma = listaTurmas.buscarHorario(Integer.parseInt(jTextFieldBusca.getText()));
-
-        if (turma != null) {
-            listModel.addElement(turma.toString());
-        } else {
-            JOptionPane.showMessageDialog(null, "Horário inexistente");
-        }
-
         jListTurmas.setModel(listModel);
-    }
 
+    }
+    
     /**
      * Método para acontecer a extração do código, que neste caso é equivalente
      * à turma.
@@ -283,6 +269,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jButtonEditar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonVizualizarAlunos = new javax.swing.JButton();
+        jComboBoxBuscaEsporte = new javax.swing.JComboBox<>();
         jPanelDadosTurma = new javax.swing.JPanel();
         jLabelHorarioTurma = new javax.swing.JLabel();
         jFormattedHorarioTurma = new javax.swing.JFormattedTextField();
@@ -336,15 +323,15 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         jLabelTurma.setText("Buscar:");
 
         jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldBuscaKeyReleased(evt);
-            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldBuscaKeyTyped(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyReleased(evt);
+            }
         });
 
-        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turma", "Listar Esporte", " " }));
+        jComboBoxTipoBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turma", "Esporte" }));
         jComboBoxTipoBusca.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxTipoBuscaItemStateChanged(evt);
@@ -386,6 +373,12 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxBuscaEsporte.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxBuscaEsporteItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelGerenciamentoTurmasLayout = new javax.swing.GroupLayout(jPanelGerenciamentoTurmas);
         jPanelGerenciamentoTurmas.setLayout(jPanelGerenciamentoTurmasLayout);
         jPanelGerenciamentoTurmasLayout.setHorizontalGroup(
@@ -393,26 +386,28 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPaneTurmas)
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
+                        .addComponent(jButtonVoltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                        .addComponent(jButtonVizualizarAlunos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonExcluir))
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
+                        .addComponent(jLabelGerenciadorTurmas)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
                         .addComponent(jButtonAdicionar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelTurma)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
-                        .addComponent(jComboBoxTipoBusca, 0, 266, Short.MAX_VALUE))
-                    .addComponent(jScrollPaneTurmas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
-                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
-                        .addComponent(jLabelGerenciadorTurmas)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanelGerenciamentoTurmasLayout.createSequentialGroup()
-                        .addComponent(jButtonVoltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonVizualizarAlunos)
+                        .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonExcluir)))
+                        .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxBuscaEsporte, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelGerenciamentoTurmasLayout.setVerticalGroup(
@@ -425,7 +420,8 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                     .addComponent(jButtonAdicionar)
                     .addComponent(jLabelTurma)
                     .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxBuscaEsporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneTurmas, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -434,7 +430,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                     .addComponent(jButtonEditar)
                     .addComponent(jButtonExcluir)
                     .addComponent(jButtonVizualizarAlunos))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jTabbedPaneGerenciadorTurmas.addTab("Gerenciamento", jPanelGerenciamentoTurmas);
@@ -503,7 +499,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                 .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                                 .addComponent(jButtonVoltarTurma)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -511,43 +507,39 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                             .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                                 .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
-                                        .addComponent(jLabelMenorIdadeTurma)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldMenorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                                         .addComponent(jLabelHorarioTurma)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFormattedHorarioTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-                                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jFormattedHorarioTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
-                                        .addComponent(jLabelMaximoAlunosTurma)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextFieldMaximoAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDadosTurmaLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabelMaiorIdadeTurma)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextFieldMaiorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(jLabelMenorIdadeTurma)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldMenorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(72, 72, 72)
+                                .addComponent(jLabelMaiorIdadeTurma)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldMaiorIdadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                         .addGap(186, 186, 186)
-                        .addComponent(jLabelFaixaIdade)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabelFaixaIdade))
                     .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabelNroTurma)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
-                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBoxModalidadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabelModalidadeTurma)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBoxModalidadeTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
-                                .addGap(86, 86, 86)
-                                .addGroup(jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelModalidadeTurma)
-                                    .addComponent(jLabelCriteriosTurma))))))
-                .addContainerGap())
+                                .addComponent(jLabelCriteriosTurma)
+                                .addGap(134, 134, 134))
+                            .addGroup(jPanelDadosTurmaLayout.createSequentialGroup()
+                                .addComponent(jLabelMaximoAlunosTurma)
+                                .addGap(3, 3, 3)
+                                .addComponent(jTextFieldMaximoAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelDadosTurmaLayout.setVerticalGroup(
             jPanelDadosTurmaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -630,7 +622,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                     .addComponent(jScrollPaneAlunosTurma)
                     .addGroup(jPanelAlunosTurmaLayout.createSequentialGroup()
                         .addComponent(jLabelAlunosTurma)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
                         .addComponent(jButtonAtualizarListaAlunos))
                     .addGroup(jPanelAlunosTurmaLayout.createSequentialGroup()
                         .addComponent(jButtonVoltarAlunosTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -663,7 +655,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPaneGerenciadorTurmas)
+            .addComponent(jTabbedPaneGerenciadorTurmas, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -720,7 +712,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
                 jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
                 jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
-                jTabbedPaneGerenciadorTurmas.setEnabledAt(2, false);
+                jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
                 listar();
 
             } else {
@@ -736,8 +728,14 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
                 jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
                 jTabbedPaneGerenciadorTurmas.setEnabledAt(1, false);
+                jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
 
                 JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+            }
+            try {
+                listaTurmas.gravar();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }//GEN-LAST:event_jButtonSalvarTurmaActionPerformed
@@ -762,6 +760,11 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (verificacao("Deseja realmente excluir esta Turma?")) {
             listaTurmas.excluir(getCod());
+            try{
+                listaTurmas.gravar();
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
             JOptionPane.showMessageDialog(null, "Turma excluída com sucesso!");
         }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
@@ -797,6 +800,14 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     private void jComboBoxTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoBuscaItemStateChanged
         // TODO add your handling code here:
         jTextFieldBusca.setText("");
+        if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Esporte")){
+            jTextFieldBusca.setEnabled(false);
+            jComboBoxBuscaEsporte.setEnabled(true);
+        } else if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Turma")){
+            jTextFieldBusca.setEnabled(true);
+            jComboBoxBuscaEsporte.setEnabled(false);
+        }
+        
     }//GEN-LAST:event_jComboBoxTipoBuscaItemStateChanged
 
     private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
@@ -810,6 +821,11 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
     private void jButtonVoltarAlunosTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarAlunosTurmaActionPerformed
         // TODO add your handling code here:
+        try {
+            listaTurmas.gravar();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         listar();
         jTabbedPaneGerenciadorTurmas.setSelectedIndex(0);
         jTabbedPaneGerenciadorTurmas.setEnabledAt(0, true);
@@ -858,6 +874,11 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (verificacao("Deseja realmente remover este aluno da turma?")) {
             t.removeAluno(getCod(jListAlunosTurma.getSelectedValue()));
+            try {
+                listaTurmas.gravar();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             JOptionPane.showMessageDialog(null, "Removido com sucesso!");
         }
     }//GEN-LAST:event_jButtonRemoverAlunoTurmaActionPerformed
@@ -867,25 +888,31 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
         char digito = evt.getKeyChar();
         if (jTextFieldBusca.getText().trim().equals("")) {
             listar();
-        } else if (jComboBoxTipoBusca.getSelectedItem().toString().equals("Turma") && digito != '\n'
-                && (Character.isLetter(digito) || Character.isDigit(digito))) {
-            listarTurma();
-        } else if (jComboBoxTipoBusca.getSelectedItem().toString().equals("Listar Esporte") && digito != '\n'
-                && Character.isDigit(digito)) {
+        } else if (jComboBoxTipoBusca.getSelectedItem().toString().equals("Esporte") && digito != '\n'
+                && Character.isLetter(digito)) {
             listarEsporte();
+        } else if (jComboBoxTipoBusca.getSelectedItem().toString().equals("Turma") && digito != '\n'
+                && Character.isDigit(digito)) {
+            listarTurma();
         }
     }//GEN-LAST:event_jTextFieldBuscaKeyReleased
 
     private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
         // TODO add your handling code here:
-        if(jComboBoxTipoBusca.getSelectedItem() == "Turma"){
-        soNumeros(evt);
+        if (jComboBoxTipoBusca.getSelectedItem() == "Turma") {
+            soNumeros(evt);
+        } else {
+
         }
-        else{
-        
-        }
-        
+
     }//GEN-LAST:event_jTextFieldBuscaKeyTyped
+
+    private void jComboBoxBuscaEsporteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxBuscaEsporteItemStateChanged
+        // TODO add your handling code here:
+        if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Esporte")){
+            listarEsporte();
+        }
+    }//GEN-LAST:event_jComboBoxBuscaEsporteItemStateChanged
 
     //<editor-fold defaultstate="collapsed" desc="Main + Variáveis">
     /**
@@ -935,6 +962,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JButton jButtonVoltarAlunosTurma;
     private javax.swing.JButton jButtonVoltarTurma;
+    private javax.swing.JComboBox<String> jComboBoxBuscaEsporte;
     private javax.swing.JComboBox<String> jComboBoxModalidadeTurma;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
     private javax.swing.JFormattedTextField jFormattedHorarioTurma;

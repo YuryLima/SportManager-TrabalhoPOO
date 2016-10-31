@@ -7,6 +7,7 @@ package org.unipampa.sportmanager.esportes;
 
 //<editor-fold defaultstate="collapsed" desc="Importações">
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import org.unipampa.sportmanager.aluno.Aluno;
@@ -17,7 +18,7 @@ import org.unipampa.sportmanager.aluno.Aluno;
  *
  * @author yuryalencar
  */
-public class Turma {
+public class Turma implements Serializable{
     
     //<editor-fold defaultstate="collapsed" desc="Atributos">
     

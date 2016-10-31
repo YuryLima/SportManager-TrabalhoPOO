@@ -24,17 +24,14 @@ import org.unipampa.sportmanager.esportes.Turma;
  */
 public class ListaTurmas implements CrudTurma {
 
-    //<editor-fold defaultstate="collapsed" desc="Atributos">
-    private ArrayList<Turma> listaEsportes = new ArrayList<>();
+    private ArrayList<Turma> listaEsportes = new ArrayList();
 
-    //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="Implementados">
     /**
      * Método que retorna toda a lista de esportes.
      *
      * @return - retorna uma lista com todas as turmas que foram cadastradas.
      */
-    public ArrayList<Turma> getLista() {
+    public List<Turma> getLista() {
         return this.listaEsportes;
     }
 
@@ -90,7 +87,7 @@ public class ListaTurmas implements CrudTurma {
     @Override
     public List<Turma> buscarEsporte(Esporte esporte) {
         List<Turma> esp = new ArrayList<>();
-        for (Turma turm : esp) {
+        for (Turma turm : listaEsportes) {
             if (turm.getModalidade() == esporte) {
                 esp.add(turm);
             }
@@ -100,49 +97,17 @@ public class ListaTurmas implements CrudTurma {
 
     //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="Buscar Horario">
-    @Override
-    public List<Turma> buscarHorario(int horario) {
-        List<Turma> ebs = new ArrayList<>();
-        for (Turma busc : ebs) {
-            if (busc.getHorario() == horario) {
-                ebs.add(busc);
-            }
-        }
-        return ebs;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="OrdenarTurma">
-    @Override
-    public List<Turma> ordenarTurma() {
-        for (int i = 0; i < listaEsportes.size() - 1; i++) {
-            int menor = i;
-            for (int j = i + 1; j < listaEsportes.size(); j++) {
-                if (listaEsportes.get(j).getTurma() < listaEsportes.get(menor).getTurma()) {
-                    menor = j;
-                }
-            }
-            Turma aux = listaEsportes.get(menor);
-            listaEsportes.set(menor, listaEsportes.get(i));
-            listaEsportes.set(i, aux);
-        }
-        return listaEsportes;
-    }
-    //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Gravar e Ler Arquivo">
     
-        
     @Override
     public void gravar() throws Exception{
         File outputFile = new File(System.getProperty("user.dir")+System.getProperty("file.separator")+"ListaTurmas.bin");
         ObjectOutputStream output;
         output = new ObjectOutputStream(new FileOutputStream(outputFile));
         output.writeObject(Turma.getSequence());
-        output.writeObject(listaEsportes);
+        output.writeObject(this.listaEsportes);
         output.close();
-}
+    }
     
     @Override
     public void ler() throws Exception{
@@ -150,23 +115,12 @@ public class ListaTurmas implements CrudTurma {
         if(inputFile.exists()){
             ObjectInputStream input;
             input = new ObjectInputStream(new FileInputStream(inputFile));
-            Turma.setSequence((Integer)input.readObject());
+            Turma.setSequence((int)input.readObject());
             this.listaEsportes = (ArrayList<Turma>) input.readObject();
             input.close();
         }
-    }    
-    
+    }
+
     //</editor-fold>
-
     
-    @Override
-    public void ordenarQuantidadeAlunos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Turma> ordenarQuantidadeAlunos(Esporte esporte) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

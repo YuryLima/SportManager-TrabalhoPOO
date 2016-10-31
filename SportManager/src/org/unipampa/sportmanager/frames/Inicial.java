@@ -48,8 +48,7 @@ public class Inicial extends javax.swing.JFrame {
         jButtonGerenciadorTurmas = new javax.swing.JButton();
         jMenuBarInicial = new javax.swing.JMenuBar();
         jMenuOpcoes = new javax.swing.JMenu();
-        jMenuItemAjudaTurmas = new javax.swing.JMenuItem();
-        jMenuItemAjudaAlunos = new javax.swing.JMenuItem();
+        jMenuItemContato = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,23 +89,14 @@ public class Inicial extends javax.swing.JFrame {
 
         jMenuOpcoes.setText("Opções");
 
-        jMenuItemAjudaTurmas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemAjudaTurmas.setText("Ajuda com o Gerenciador de turmas");
-        jMenuItemAjudaTurmas.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemContato.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemContato.setText("Suporte Online");
+        jMenuItemContato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAjudaTurmasActionPerformed(evt);
+                jMenuItemContatoActionPerformed(evt);
             }
         });
-        jMenuOpcoes.add(jMenuItemAjudaTurmas);
-
-        jMenuItemAjudaAlunos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemAjudaAlunos.setText("Ajuda com o Gerenciador de alunos");
-        jMenuItemAjudaAlunos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAjudaAlunosActionPerformed(evt);
-            }
-        });
-        jMenuOpcoes.add(jMenuItemAjudaAlunos);
+        jMenuOpcoes.add(jMenuItemContato);
 
         jMenuBarInicial.add(jMenuOpcoes);
 
@@ -138,15 +128,10 @@ public class Inicial extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonGerenciadorTurmasActionPerformed
 
-    private void jMenuItemAjudaTurmasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjudaTurmasActionPerformed
+    private void jMenuItemContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContatoActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Ajuda turmas");
-    }//GEN-LAST:event_jMenuItemAjudaTurmasActionPerformed
-
-    private void jMenuItemAjudaAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjudaAlunosActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Ajuda alunos");
-    }//GEN-LAST:event_jMenuItemAjudaAlunosActionPerformed
+        JOptionPane.showMessageDialog(null, "E-mail: yuryalencar19@gmail.com\n            eslucascorrea@gmail.com");
+    }//GEN-LAST:event_jMenuItemContatoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,8 +172,7 @@ public class Inicial extends javax.swing.JFrame {
     private javax.swing.JButton jButtonGerenciadorDeAlunos;
     private javax.swing.JButton jButtonGerenciadorTurmas;
     private javax.swing.JMenuBar jMenuBarInicial;
-    private javax.swing.JMenuItem jMenuItemAjudaAlunos;
-    private javax.swing.JMenuItem jMenuItemAjudaTurmas;
+    private javax.swing.JMenuItem jMenuItemContato;
     private javax.swing.JMenu jMenuOpcoes;
     private javax.swing.JPanel jPanelInicial;
     // End of variables declaration//GEN-END:variables
