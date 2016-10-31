@@ -5,6 +5,10 @@
  */
 package org.unipampa.sportmanager.frames;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import jdk.nashorn.internal.scripts.JO;
 import org.unipampa.sportmanager.listainterface.CrudAluno;
@@ -32,7 +36,7 @@ public class Inicial extends javax.swing.JFrame {
         
         //this.setIconImage(org.unipampa.sportmanager.imagens.bolaaa.jpg);
         this.setLocationRelativeTo(null);
-        this.setTitle("Gerenciador de esportes - Trabalho POO");
+        this.setTitle("SportManager - Trabalho POO");
     }
 
     /**
@@ -75,27 +79,27 @@ public class Inicial extends javax.swing.JFrame {
         jPanelInicial.setLayout(jPanelInicialLayout);
         jPanelInicialLayout.setHorizontalGroup(
             jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelInicialLayout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addGroup(jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonGerenciadorTurmas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonGerenciadorDeAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicialLayout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
+            .addGroup(jPanelInicialLayout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addGroup(jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonGerenciadorDeAlunos, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonGerenciadorTurmas))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelInicialLayout.setVerticalGroup(
             jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicialLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonGerenciadorTurmas)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonGerenciadorDeAlunos)
-                .addGap(25, 25, 25))
+                .addGap(26, 26, 26))
         );
 
         jMenuOpcoes.setText("Opções");

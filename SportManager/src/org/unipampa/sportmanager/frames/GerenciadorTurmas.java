@@ -807,6 +807,7 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
             jTextFieldBusca.setEnabled(false);
             jComboBoxBuscaEsporte.setEnabled(true);
         } else if(jComboBoxTipoBusca.getSelectedItem().toString().equals("Turma")){
+            listar();
             jTextFieldBusca.setEnabled(true);
             jComboBoxBuscaEsporte.setEnabled(false);
         }

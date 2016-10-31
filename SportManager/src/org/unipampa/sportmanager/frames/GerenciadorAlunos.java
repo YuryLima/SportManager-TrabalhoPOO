@@ -63,30 +63,35 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         //Verificando se o campo idade foi preenchido para que assim possa saber se o aluno
         //é menor de idade ou não
         if(!jTextFieldIdadeAlunoDados.getText().trim().equals("")){
-            //Verificando a idade do aluno caso seja maior de idade cria um objeto aluno
-            if(Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 18){
-                if(!jTextFieldNomeAlunoDados.getText().trim().equals("")){
+            if(!(Integer.parseInt(jTextFieldIdadeAlunoDados.getText())< 3) &&
+                !(Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 114)){
+                //Verificando a idade do aluno caso seja maior de idade cria um objeto aluno
+                if(Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 18){
+                    if(!jTextFieldNomeAlunoDados.getText().trim().equals("")){
 
-                    a = new Aluno(jTextFieldNomeAlunoDados.getText(), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
-                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
-                    a.setTelefoneContato(telefone);
-                    a.setRg(rg);
+                        a = new Aluno(jTextFieldNomeAlunoDados.getText(), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
+                        a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
+                        a.setTelefoneContato(telefone);
+                        a.setRg(rg);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                    }
+                //Caso o aluno seja menor de idade     
                 } else {
-                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                    //Verificando se os alunos menores de idade possuem os dados mínimos
+                    if(jTextFieldNomeAlunoDados.getText().trim().equals("") || jTextFieldNomeRespAlunoMenorDados.getText().trim().equals("")
+                            || jTextFieldRGRespAlunoMenorDados.getText().trim().equals("")){
+                        JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
+                    } else {
+                        a = new AlunoMenorDeIdade(jTextFieldNomeAlunoDados.getText(), jTextFieldNomeRespAlunoMenorDados.getText()
+                                , Long.parseLong(jTextFieldRGRespAlunoMenorDados.getText()), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
+                        a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
+                        a.setTelefoneContato(telefone);
+                        a.setRg(rg);
+                    }
                 }
-            //Caso o aluno seja menor de idade     
             } else {
-                //Verificando se os alunos menores de idade possuem os dados mínimos
-                if(jTextFieldNomeAlunoDados.getText().trim().equals("") || jTextFieldNomeRespAlunoMenorDados.getText().trim().equals("")
-                        || jTextFieldRGRespAlunoMenorDados.getText().trim().equals("")){
-                    JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios(*)");
-                } else {
-                    a = new AlunoMenorDeIdade(jTextFieldNomeAlunoDados.getText(), jTextFieldNomeRespAlunoMenorDados.getText()
-                            , Long.parseLong(jTextFieldRGRespAlunoMenorDados.getText()), Integer.parseInt(jTextFieldIdadeAlunoDados.getText()));
-                    a.setEndereco(jTextFieldEnderecoAlunoDados.getText().trim());
-                    a.setTelefoneContato(telefone);
-                    a.setRg(rg);
-                }
+                JOptionPane.showMessageDialog(null, "ERRO 05 - Idade inválida");
             }
             
         } else {
@@ -773,7 +778,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         }
         // Lembrete
         if(jTextFieldIdadeAlunoDados.getText().trim().equals("")){
-            jLabelLembreteIdade.setText("Campo idade obrigatório e necessário para buscar turmas");
+            jLabelLembreteIdade.setText("Campo idade obrigatório");
         } else if(!jTextFieldIdadeAlunoDados.getText().trim().equals("")){
             jLabelLembreteIdade.setText("");
         }
@@ -787,7 +792,8 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
         // TODO add your handling code here:
         Aluno a = createAluno();
         
-        if(isEdit && a != null){
+        if(isEdit && a != null && (Integer.parseInt(jTextFieldIdadeAlunoDados.getText())< 3 ||
+                Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 114)){
             if(verificacao("Deseja realmente editar o aluno? Obs.: Esta ação modificará sua matricula")){
                 if(listaAlunos.editar(getCod(), a)){
                     limparCampos();
@@ -801,7 +807,8 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
             }
 
 
-        } else if(a != null){
+        } else if(a != null && (Integer.parseInt(jTextFieldIdadeAlunoDados.getText())< 3 ||
+                Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 114)){
 
             if(listaAlunos.incluir(a)){
                 limparCampos();
