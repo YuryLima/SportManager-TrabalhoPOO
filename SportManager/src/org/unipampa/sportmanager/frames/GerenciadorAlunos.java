@@ -807,8 +807,7 @@ public class GerenciadorAlunos extends javax.swing.JFrame {
             }
 
 
-        } else if(a != null && (Integer.parseInt(jTextFieldIdadeAlunoDados.getText())< 3 ||
-                Integer.parseInt(jTextFieldIdadeAlunoDados.getText()) > 114)){
+        } else if(a != null){
 
             if(listaAlunos.incluir(a)){
                 limparCampos();
