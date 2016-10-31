@@ -30,6 +30,7 @@ public class Inicial extends javax.swing.JFrame {
         this.listaAlunos = listaAlunos;
         this.listaTurmas = listaTurmas;
         
+        //this.setIconImage(org.unipampa.sportmanager.imagens.bolaaa.jpg);
         this.setLocationRelativeTo(null);
         this.setTitle("Gerenciador de esportes - Trabalho POO");
     }
@@ -46,6 +47,7 @@ public class Inicial extends javax.swing.JFrame {
         jPanelInicial = new javax.swing.JPanel();
         jButtonGerenciadorDeAlunos = new javax.swing.JButton();
         jButtonGerenciadorTurmas = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBarInicial = new javax.swing.JMenuBar();
         jMenuOpcoes = new javax.swing.JMenu();
         jMenuItemContato = new javax.swing.JMenuItem();
@@ -66,6 +68,9 @@ public class Inicial extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/unipampa/sportmanager/imagens/índice.jpg"))); // NOI18N
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout jPanelInicialLayout = new javax.swing.GroupLayout(jPanelInicial);
         jPanelInicial.setLayout(jPanelInicialLayout);
         jPanelInicialLayout.setHorizontalGroup(
@@ -75,12 +80,18 @@ public class Inicial extends javax.swing.JFrame {
                 .addGroup(jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonGerenciadorTurmas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonGerenciadorDeAlunos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicialLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
         jPanelInicialLayout.setVerticalGroup(
             jPanelInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicialLayout.createSequentialGroup()
-                .addContainerGap(186, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(7, 7, 7)
                 .addComponent(jButtonGerenciadorTurmas)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonGerenciadorDeAlunos)
@@ -171,6 +182,7 @@ public class Inicial extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGerenciadorDeAlunos;
     private javax.swing.JButton jButtonGerenciadorTurmas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBarInicial;
     private javax.swing.JMenuItem jMenuItemContato;
     private javax.swing.JMenu jMenuOpcoes;
