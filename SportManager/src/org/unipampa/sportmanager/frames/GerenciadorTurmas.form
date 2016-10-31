@@ -108,12 +108,14 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelGerenciadorTurmas" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButtonAdicionar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelTurma" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldBusca" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jComboBoxTipoBusca" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBoxBuscaEsporte" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jButtonAdicionar" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelTurma" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldBusca" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxBuscaEsporte" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPaneTurmas" min="-2" pref="179" max="-2" attributes="0"/>

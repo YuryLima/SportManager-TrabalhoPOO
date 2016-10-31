@@ -416,12 +416,13 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabelGerenciadorTurmas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAdicionar)
-                    .addComponent(jLabelTurma)
-                    .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxBuscaEsporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxTipoBusca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelGerenciamentoTurmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonAdicionar)
+                        .addComponent(jLabelTurma)
+                        .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxBuscaEsporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneTurmas, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -684,6 +685,8 @@ public class GerenciadorTurmas extends javax.swing.JFrame {
 
         } else if (Integer.parseInt(jTextFieldMenorIdadeTurma.getText()) >= Integer.parseInt(jTextFieldMaiorIdadeTurma.getText())) {
             JOptionPane.showMessageDialog(null, "Menor Idade maior ou igual com a Maior Idade");
+        } else if (Integer.parseInt(jTextFieldMenorIdadeTurma.getText()) < 3 || Integer.parseInt(jTextFieldMaiorIdadeTurma.getText()) >114) {
+            JOptionPane.showMessageDialog(null, "Menor Idade deve ser maior que 2 ou Maior Idade deve ser menor que 115");
         } else if (!jFormattedHorarioTurma.getText().equals("")) {
             int end = 0;
             String horaS = "", minutos = "";
